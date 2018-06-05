@@ -1,6 +1,9 @@
 // axios 初始化设置已经拦截器设置
 import axios from './http'
 import user from './user'
+import article from './article'
+import banner from './banner'
+import discuss from './discuss'
 
 // axios设置默认值
 axios.defaults.timeout = 15000
@@ -11,7 +14,10 @@ axios.defaults.headers = {
 }
 
 const api = {
-  ...user // 登录相关api
+  ...user, // 登录相关api
+  ...article,
+  ...banner,
+  ...discuss
 }
 
 // 注册vue插件

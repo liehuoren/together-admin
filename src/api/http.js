@@ -6,8 +6,8 @@ import Cookies from 'js-cookie';
 // 请求拦截器 如果在store中获取到了token,那么就写入请求头
 axios.interceptors.request.use(
   config => {
-    if (sessionStorage.getItem('access_token')) {
-      config.headers.Authorization = sessionStorage.getItem('access_token')
+    if (Cookies.get('access_token')) {
+      config.headers.Authorization = Cookies.get('access_token')
     }
     return config
   },

@@ -30,7 +30,7 @@
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
                     </Form>
-                    <p class="login-tip">输入任意用户名和密码即可</p>
+                    <!--<p class="login-tip">输入任意用户名和密码即可</p>-->
                 </div>
             </Card>
         </div>
@@ -39,7 +39,6 @@
 
 <script>
 import Cookies from 'js-cookie';
-// import { login } from '@/api/user'
 export default {
     data () {
         return {
@@ -66,7 +65,7 @@ export default {
                         Cookies.set('user', this.form.username);
                         Cookies.set('password', this.form.password);
                         Cookies.set('access', 0);
-                        sessionStorage.setItem('access_token', (res.token_type + ' ' + res.access_token))
+                        Cookies.set('access_token', (res.data.token_type + ' ' + res.data.access_token))
                         this.$router.push({
                             name: 'home_index'
                         });

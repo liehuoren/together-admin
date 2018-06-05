@@ -28,6 +28,15 @@ const user = {
       .catch(e => {
         return Promise.reject(e)
       })
+  },
+  getUserList (params) {
+    var url = '/users'
+    return axios.get(url, {params:params}).then(res => {
+      return res
+    })
+    .catch(e => {
+      return Promise.reject(e)
+    })
   }
 }
 

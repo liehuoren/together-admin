@@ -4,15 +4,15 @@
 </style>
 
 <template>
-    <div>
-        <Row>
-            <Col span="18">
+    <div class="common-div">
+        <!--<Row>
+            <Col span="18">-->
                 <Card>
                     <Form :label-width="80">
                         <FormItem label="文章标题" :error="articleError">
-                            <Input v-model="articleTitle" @on-blur="handleArticletitleBlur" icon="android-list"/>
+                            <Input v-model="articleTitle" @on-blur="handleArticleTitleBlur" icon="android-list"/>
                         </FormItem>
-                        <div class="article-link-con">
+                       <!-- <div class="article-link-con">
                             <transition name="fixed-link">
                                 <FormItem v-show="showLink" label="固定链接">
                                     <span>
@@ -24,14 +24,20 @@
                                     </span>
                                 </FormItem>
                             </transition>
-                        </div>
+                        </div>-->
                     </Form>
+                    <Row class="margin-top-0 publish-button-con">
+                        <!--<span class="publish-button"><Button @click="handleCancel">取消</Button></span>-->
+                        <span class="publish-button"><Button class="common-button" @click="handlePreview">预览</Button></span>
+                        <span class="publish-button"><Button class="common-button" @click="handleSaveDraft">保存</Button></span>
+                        <!--<span class="publish-button"><Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button></span>-->
+                    </Row>
                     <div class="margin-top-20">
                         <textarea id="articleEditor"></textarea>
                     </div>
                 </Card>
-            </Col>
-            <Col span="6" class="padding-left-10">
+            <!--</Col>-->
+            <!--<Col span="6" class="padding-left-10">
                 <Card>
                     <p slot="title">
                         <Icon type="paper-airplane"></Icon>
@@ -73,7 +79,7 @@
                         <transition name="publish-time">
                             <div v-show="editPublishTime" class="publish-time-picker-con">
                                 <div class="margin-top-10">
-                                    <DatePicker @on-change="setPublishTime" type="datetime" style="width:200px;" placeholder="选择日期和时间" ></DatePicker>                                    
+                                    <DatePicker @on-change="setPublishTime" type="datetime" style="width:200px;" placeholder="选择日期和时间" ></DatePicker>
                                 </div>
                                 <div class="margin-top-10">
                                     <Button type="primary" @click="handleSavePublishTime">确认</Button>
@@ -131,7 +137,7 @@
                         <transition name="add-new-tag">
                             <div v-show="addingNewTag" class="add-new-tag-con">
                                 <Col span="14">
-                                    <Input v-model="newTagName" placeholder="请输入标签名" />                                
+                                    <Input v-model="newTagName" placeholder="请输入标签名" />
                                 </Col>
                                 <Col span="5" class="padding-left-10">
                                     <Button @click="createNewTag" long type="primary">确定</Button>
@@ -143,65 +149,121 @@
                         </transition>
                     </Card>
                 </div>
-            </Col>
-        </Row>
+            </Col>-->
+        <!--</Row>-->
     </div>
 </template>
 
 <script>
-import tinymce from 'tinymce';
+import tinymce from 'tinymce'
+import Cookies from 'js-cookie'
 export default {
-    name: 'artical-publish',
-    data () {
-        return {
-            articleTitle: '',
-            articleError: '',
-            showLink: false,
-            fixedLink: '',
-            articlePath: '',
-            articlePathHasEdited: false,
-            editLink: false,
-            editPathButtonType: 'ghost',
-            editPathButtonText: '编辑',
-            articleStateList: [{value: '草稿'}, {value: '等待复审'}],
-            editOpenness: false,
-            Openness: '公开',
-            currentOpenness: '公开',
-            topArticle: false,
-            publishTime: '',
-            publishTimeType: 'immediately',
-            editPublishTime: false, // 是否正在编辑发布时间
-            articleTagSelected: [], // 文章选中的标签
-            articleTagList: [], // 所有标签列表
-            classificationList: [],
-            classificationSelected: [], // 在所有分类目录中选中的目录数组
-            offenUsedClass: [],
-            offenUsedClassSelected: [], // 常用目录选中的目录
-            classificationFinalSelected: [], // 最后实际选择的目录
-            publishLoading: false,
-            addingNewTag: false, // 添加新标签
-            newTagName: '' // 新建标签名
-        };
+  name: 'artical-publish',
+  data () {
+    return {
+      articleTitle: '',
+      articleError: '',
+      showLink: false,
+      fixedLink: '',
+      articlePath: '',
+      articlePathHasEdited: false,
+      editLink: false,
+      editPathButtonType: 'ghost',
+      editPathButtonText: '编辑',
+      articleStateList: [{value: '草稿'}, {value: '等待复审'}],
+      editOpenness: false,
+      Openness: '公开',
+      currentOpenness: '公开',
+      topArticle: false,
+      publishTime: '',
+      publishTimeType: 'immediately',
+      editPublishTime: false, // 是否正在编辑发布时间
+      articleTagSelected: [], // 文章选中的标签
+      articleTagList: [], // 所有标签列表
+      classificationList: [],
+      classificationSelected: [], // 在所有分类目录中选中的目录数组
+      offenUsedClass: [],
+      offenUsedClassSelected: [], // 常用目录选中的目录
+      classificationFinalSelected: [], // 最后实际选择的目录
+      publishLoading: false,
+      addingNewTag: false, // 添加新标签
+      newTagName: '' // 新建标签名
+    }
+  },
+  methods: {
+    handleArticleTitleBlur () {
+      if (this.articleTitle.length !== 0) {
+        // this.articleError = '';
+        localStorage.articleTitle = this.articleTitle // 本地存储文章标题
+        if (!this.articlePathHasEdited) {
+          let date = new Date()
+          let year = date.getFullYear()
+          let month = date.getMonth() + 1
+          let day = date.getDate()
+          this.fixedLink = window.location.host + '/' + year + '/' + month + '/' + day + '/'
+          this.articlePath = this.articleTitle
+          this.articlePathHasEdited = true
+          this.showLink = true
+        }
+      } else {
+        // this.articleError = '文章标题不可为空哦';
+        this.$Message.error('文章标题不可为空哦')
+      }
     },
-    methods: {
-        handleArticletitleBlur () {
-            if (this.articleTitle.length !== 0) {
-                // this.articleError = '';
-                localStorage.articleTitle = this.articleTitle; // 本地存储文章标题
-                if (!this.articlePathHasEdited) {
-                    let date = new Date();
-                    let year = date.getFullYear();
-                    let month = date.getMonth() + 1;
-                    let day = date.getDate();
-                    this.fixedLink = window.location.host + '/' + year + '/' + month + '/' + day + '/';
-                    this.articlePath = this.articleTitle;
-                    this.articlePathHasEdited = true;
-                    this.showLink = true;
-                }
-            } else {
-                // this.articleError = '文章标题不可为空哦';
-                this.$Message.error('文章标题不可为空哦');
-            }
+    canPublish () {
+      if (this.articleTitle.length === 0) {
+        this.$Message.error('请输入文章标题')
+        return false
+      } else {
+        return true
+      }
+    },
+    handlePreview () {
+      if (this.canPublish()) {
+        //     if (this.publishTimeType === 'immediately') {
+        let date = new Date()
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let day = date.getDate()
+        let hour = date.getHours()
+        let minute = date.getMinutes()
+        let second = date.getSeconds()
+        localStorage.publishTime = year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second
+        localStorage.articleTitle = this.articleTitle
+        localStorage.articleContent = tinymce.activeEditor.getContent()
+        this.$router.push({
+          name: 'articleView'
+        })
+      }
+    },
+    handleSaveDraft () {
+      if (this.canPublish()) {
+        let date = new Date()
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let day = date.getDate()
+        let hour = date.getHours()
+        let minute = date.getMinutes()
+        let second = date.getSeconds()
+        let content = tinymce.activeEditor.getContent()
+        let newArticle = {
+          // id: localStorage.testData.length,
+          title: this.articleTitle,
+          author: Cookies.get('user'),
+          introduction: content.substring(0, 100),
+          createTime: year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second,
+          content: content
+        }
+        // localStorage.testData.article.push(newArticle);
+        this.$router.push({
+          name: 'article-list'
+        })
+      }
+    }
+    /* handleCancel(){
+            this.$router.push({
+                name: 'article-list'
+            });
         },
         editArticlePath () {
             this.editLink = !this.editLink;
@@ -260,39 +322,6 @@ export default {
             this.newTagName = '';
             this.addingNewTag = false;
         },
-        canPublish () {
-            if (this.articleTitle.length === 0) {
-                this.$Message.error('请输入文章标题');
-                return false;
-            } else {
-                return true;
-            }
-        },
-        handlePreview () {
-            if (this.canPublish()) {
-                if (this.publishTimeType === 'immediately') {
-                    let date = new Date();
-                    let year = date.getFullYear();
-                    let month = date.getMonth() + 1;
-                    let day = date.getDate();
-                    let hour = date.getHours();
-                    let minute = date.getMinutes();
-                    let second = date.getSeconds();
-                    localStorage.publishTime = year + ' 年 ' + month + ' 月 ' + day + ' 日 -- ' + hour + ' : ' + minute + ' : ' + second;
-                } else {
-                    localStorage.publishTime = this.publishTime; // 本地存储发布时间
-                }
-                localStorage.content = tinymce.activeEditor.getContent();
-                this.$router.push({
-                    name: 'preview'
-                });
-            }
-        },
-        handleSaveDraft () {
-            if (!this.canPublish()) {
-                //
-            }
-        },
         handlePublish () {
             if (this.canPublish()) {
                 this.publishLoading = true;
@@ -307,17 +336,17 @@ export default {
         },
         handleSelectTag () {
             localStorage.tagsList = JSON.stringify(this.articleTagSelected); // 本地存储文章标签列表
-        }
-    },
-    computed: {
-        completeUrl () {
-            let finalUrl = this.fixedLink + this.articlePath;
-            localStorage.finalUrl = finalUrl; // 本地存储完整文章路径
-            return finalUrl;
-        }
-    },
-    mounted () {
-        this.articleTagList = [
+        } */
+  },
+  computed: {
+    completeUrl () {
+      let finalUrl = this.fixedLink + this.articlePath
+      localStorage.finalUrl = finalUrl // 本地存储完整文章路径
+      return finalUrl
+    }
+  },
+  mounted () {
+    /* this.articleTagList = [
             {value: 'vue'},
             {value: 'iview'},
             {value: 'ES6'},
@@ -403,32 +432,36 @@ export default {
             {
                 title: '缩写'
             }
-        ];
-        tinymce.init({
-            selector: '#articleEditor',
-            branding: false,
-            elementpath: false,
-            height: 600,
-            language: 'zh_CN.GB2312',
-            menubar: 'edit insert view format table tools',
-            theme: 'modern',
-            plugins: [
-                'advlist autolink lists link image charmap print preview hr anchor pagebreak imagetools',
-                'searchreplace visualblocks visualchars code fullscreen fullpage',
-                'insertdatetime media nonbreaking save table contextmenu directionality',
-                'emoticons paste textcolor colorpicker textpattern imagetools codesample'
-            ],
-            toolbar1: ' newnote print fullscreen preview | undo redo | insert | styleselect | forecolor backcolor bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image emoticons media codesample',
-            autosave_interval: '20s',
-            image_advtab: true,
-            table_default_styles: {
-                width: '100%',
-                borderCollapse: 'collapse'
-            }
-        });
-    },
-    destroyed () {
-        tinymce.get('articleEditor').destroy();
+        ]; */
+    tinymce.init({
+      selector: '#articleEditor',
+      branding: false,
+      elementpath: false,
+      height: 600,
+      language: 'zh_CN.GB2312',
+      menubar: 'edit insert view format table tools',
+      theme: 'modern',
+      plugins: [
+        'advlist autolink lists link image charmap print preview hr anchor pagebreak imagetools',
+        'searchreplace visualblocks visualchars code fullscreen fullpage',
+        'insertdatetime media nonbreaking save table contextmenu directionality',
+        'emoticons paste textcolor colorpicker textpattern imagetools codesample'
+      ],
+      toolbar1: ' newnote print fullscreen preview | undo redo | insert | styleselect | forecolor backcolor bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image emoticons media codesample',
+      autosave_interval: '20s',
+      image_advtab: true,
+      table_default_styles: {
+        width: '100%',
+        borderCollapse: 'collapse'
+      }
+    })
+    if (localStorage.actionType != 'add') {
+      this.articleTitle = localStorage.articleTitle
+      tinymce.activeEditor.setContent(localStorage.articleContent)
     }
-};
+  },
+  destroyed () {
+    tinymce.get('articleEditor').destroy()
+  }
+}
 </script>
