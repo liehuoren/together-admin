@@ -5,156 +5,182 @@
 
 <template>
     <div class="image-editor">
-        <Row :gutter="10">
-            <Col span="12">
-                <Card>
-                    <p slot="title">
-                        <Icon type="qr-scanner"></Icon>
-                        基础实例
-                    </p>
-                    <Row :gutter="10">
-                        <Col span="14" class="image-editor-con1">
-                            <div class="cropper">
-                                <img id="cropimg1" alt="">
-                            </div>
-                        </Col>
-                        <Col span="10" class="image-editor-con1">
-                            <Row type="flex" justify="center" align="middle" class="image-editor-con1-preview-con">
-                                <div id="preview1"></div>
+        <div class="common-div">
+            <!--<Row>
+                <Col>-->
+                    <Card>
+                        <!--<p slot="title">
+                            <Icon type="qr-scanner"></Icon>
+                            基础实例
+                        </p>-->
+                        <Form ref="formBanner" :model="formBanner" :rules="ruleValidate" :label-width="80" >
+                            <Row>
+                                <Col span="10">
+                                    <FormItem label="广告标题" prop="advertTitle">
+                                        <Input v-model="formBanner.advertTitle" :readonly="isView" @on-blur="handleAdvertTitleBlur" icon="android-list"/>
+                                    </FormItem>
+                                </Col>
+                                <Col span="10">
+                                    <FormItem label="所属文章" prop="articleId">
+                                        <Select v-model="formBanner.articleId" :disabled="isView">
+                                            <Option v-for="item in articles" :value="item.id">{{item.title}}</Option>
+                                        </Select>
+                                    </FormItem>
+                                </Col>
                             </Row>
-                            <div class="image-editor-con1-btn-con margin-top-10">
-                                <input type="file" accept="image/png, image/jpeg, image/gif, image/jpg" @change="handleChange1" id="fileinput1" class="fileinput" />
-                                <label class="filelabel" for="fileinput1"><Icon type="image"></Icon>&nbsp;选择图片</label>
-                                <span><Button @click="handlecrop1" type="primary" icon="crop">裁剪</Button></span>
-                            </div>
-                            <Modal v-model="option1.showCropedImage">
-                                <p slot="header">预览裁剪之后的图片</p>
-                                <img :src="option1.cropedImg" alt="" v-if="option1.showCropedImage" style="width: 100%;">
-                            </Modal>
-                        </Col>
-                    </Row>
-                </Card>
-            </Col>
-            <Col span="12">
+                        </Form>
+                        <Row v-if="isView">
+                            <Col>
+                                <div class="image-editor-view">
+                                    <img id="cropImg" alt="" src="../../../images/cropper-test.png">
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row :gutter="10" v-else>
+                            <Col span="14" class="image-editor-con">
+                                <div class="cropper">
+                                    <img id="cropImg" alt="" :src="formBanner.bannerUrl">
+                                </div>
+                            </Col>
+                            <Col span="10" class="image-editor-con">
+                                <Row type="flex" justify="center" align="middle" class="image-editor-con-preview-con">
+                                    <div id="preview"></div>
+                                </Row>
+                                <div class="image-editor-con1-btn-con margin-top-10">
+                                    <input type="file" accept="image/png, image/jpeg, image/gif, image/jpg" @change="handleChange" id="fileinput1" class="fileinput" />
+                                    <label class="filelabel" for="fileinput1"><Icon type="image"></Icon>&nbsp;选择图片</label>
+                                    <span><Button @click="handleCrop" type="primary" icon="crop">裁剪</Button></span>
+                                    <span><Button type="primary" class="common-button" @click="handleSaveBanner('formBanner')" icon="folder">保存</Button></span>
+                                </div>
+                                <Modal v-model="option.showCropedImage">
+                                    <p slot="header">预览裁剪之后的图片</p>
+                                    <img :src="option.cropedImg" alt="" v-if="option.showCropedImage" style="width: 100%;">
+                                </Modal>
+                            </Col>
+                        </Row>
+                    </Card>
+                <!--</Col>-->
+                <!--<Col span="12">
+                    <Card>
+                        <p slot="title">
+                            <Icon type="android-options"></Icon>
+                            获取图片数据
+                        </p>
+                        <Row :gutter="10">
+                            <Col span="14" class="image-editor-con2">
+                                <div class="cropper">
+                                    <img id="cropimg2" src="../../../images/cropper-test.png" alt="">
+                                </div>
+                            </Col>
+                            <Col span="10" class="image-editor-con2">
+                                <p><b>x:</b>{{ cropdata2.x }}</p>
+                                <p><b>y:</b>{{ cropdata2.y }}</p>
+                                <p><b>width:</b>{{ cropdata2.w }}</p>
+                                <p><b>heigh:</b>{{ cropdata2.h }}</p>
+                                <p><b>deg:</b>{{ cropdata2.deg }}</p>
+                                <p><b>scaleX:</b>{{ cropdata2.scaleX }}</p>
+                                <p><b>scaleY:</b>{{ cropdata2.scaleY }}</p>
+                                <div class="margin-top-10" style="text-align: center;">
+                                    <ButtonGroup>
+                                        <Button @click="cropper2.rotate(-90)" type="primary"><Icon :size="14" type="arrow-return-left"></Icon></Button>
+                                        <Button @click="cropper2.rotate(90)" type="primary"><Icon :size="14" type="arrow-return-right"></Icon></Button>
+                                        <Button @click="cropper2.zoom(0.1)" type="primary"><Icon :size="14" type="plus-round"></Icon></Button>
+                                        <Button @click="cropper2.zoom(-0.1)" type="primary"><Icon :size="14" type="minus-round"></Icon></Button>
+                                        <Button @click="cropper2.scaleX(-cropper2.getData().scaleX)" type="primary"><Icon :size="14" type="android-more-horizontal"></Icon></Button>
+                                        <Button @click="cropper2.scaleY(-cropper2.getData().scaleY)" type="primary"><Icon :size="14" type="android-more-vertical"></Icon></Button>
+                                    </ButtonGroup>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Col>-->
+            <!--</Row>-->
+            <!--<Row class="margin-top-10">
                 <Card>
                     <p slot="title">
-                        <Icon type="android-options"></Icon>
-                        获取图片数据
+                        <Icon type="levels"></Icon>
+                        综合实例
                     </p>
                     <Row :gutter="10">
-                        <Col span="14" class="image-editor-con2">
-                            <div class="cropper">
-                                <img id="cropimg2" src="../../../images/cropper-test.png" alt="">
+                        <Col span="12" class="image-editor-con3">
+                            <div class="cropper3">
+                                <img id="cropimg3" src="../../../images/cropper-test.png" alt="">
                             </div>
                         </Col>
-                        <Col span="10" class="image-editor-con2">
-                            <p><b>x:</b>{{ cropdata2.x }}</p>
-                            <p><b>y:</b>{{ cropdata2.y }}</p>
-                            <p><b>width:</b>{{ cropdata2.w }}</p>
-                            <p><b>heigh:</b>{{ cropdata2.h }}</p>
-                            <p><b>deg:</b>{{ cropdata2.deg }}</p>
-                            <p><b>scaleX:</b>{{ cropdata2.scaleX }}</p>
-                            <p><b>scaleY:</b>{{ cropdata2.scaleY }}</p>
-                            <div class="margin-top-10" style="text-align: center;">
-                                <ButtonGroup>
-                                    <Button @click="cropper2.rotate(-90)" type="primary"><Icon :size="14" type="arrow-return-left"></Icon></Button>
-                                    <Button @click="cropper2.rotate(90)" type="primary"><Icon :size="14" type="arrow-return-right"></Icon></Button>
-                                    <Button @click="cropper2.zoom(0.1)" type="primary"><Icon :size="14" type="plus-round"></Icon></Button>
-                                    <Button @click="cropper2.zoom(-0.1)" type="primary"><Icon :size="14" type="minus-round"></Icon></Button>
-                                    <Button @click="cropper2.scaleX(-cropper2.getData().scaleX)" type="primary"><Icon :size="14" type="android-more-horizontal"></Icon></Button>
-                                    <Button @click="cropper2.scaleY(-cropper2.getData().scaleY)" type="primary"><Icon :size="14" type="android-more-vertical"></Icon></Button>
-                                </ButtonGroup>
-                            </div>
+                        <Col span="6" class="image-editor-con3">
+                            <Row>
+                                <Col span="24" class="image-editor-con3-btn-box">
+                                    <input type="file" accept="image/png, image/jpeg, image/gif, image/jpg" @change="handleChange3" id="fileinput3" class="fileinput" />
+                                    <label class="filelabel filelabel3" for="fileinput3"><Icon type="image"></Icon>&nbsp;选择图片</label>
+                                </Col>
+                            </Row>
+                            <Row class="margin-top-10">
+                                <Col span="24" class="crop3-btn-box">
+                                    <Tooltip content="开始裁剪" placement="bottom">
+                                        <Button @click="cropper3.crop()" type="primary"><Icon :size="18" type="checkmark-round"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="取消裁剪" placement="bottom">
+                                        <Button @click="cropper3.clear()" type="primary"><Icon :size="18" type="close-round"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="不可用" placement="bottom">
+                                        <Button @click="cropper3.disable()" type="primary"><Icon :size="18" type="android-lock"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="可用" placement="bottom">
+                                        <Button @click="cropper3.enable()" type="primary"><Icon :size="18" type="android-unlock"></Icon></Button>
+                                    </Tooltip>
+                                </Col>
+                            </Row>
+                            <Row class="margin-top-10" :gutter="10">
+                                <Col span="24" class="crop3-btn-box">
+                                    <Tooltip content="放大" placement="bottom">
+                                        <Button @click="handlezooml" type="primary"><Icon :size="16" type="plus-round"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="缩小" placement="bottom">
+                                        <Button @click="handlezooms" type="primary"><Icon :size="16" type="minus-round"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="左转" placement="bottom">
+                                        <Button @click="handlerotatel" type="primary"><Icon :size="16" type="arrow-return-left"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="右转" placement="bottom">
+                                        <Button @click="handlerotater" type="primary"><Icon :size="16" type="arrow-return-right"></Icon></Button>
+                                    </Tooltip>
+                                </Col>
+                            </Row>
+                            <Row class="margin-top-10" :gutter="10">
+                                <Col span="24" class="crop3-btn-box">
+                                    <Tooltip content="左移" placement="bottom">
+                                        <Button @click="handlemovel" type="primary"><Icon :size="18" type="android-arrow-back"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="右移" placement="bottom">
+                                        <Button @click="handlemover" type="primary"><Icon :size="18" type="android-arrow-forward"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="上移" placement="bottom">
+                                        <Button @click="handlemoveu" type="primary"><Icon :size="18" type="android-arrow-up"></Icon></Button>
+                                    </Tooltip>
+                                    <Tooltip content="下移" placement="bottom">
+                                        <Button @click="handlemoved" type="primary"><Icon :size="18" type="android-arrow-down"></Icon></Button>
+                                    </Tooltip>
+                                </Col>
+                            </Row>
+                            <Row class="margin-top-10">
+                                <Col span="24" class="crop3-btn-box">
+                                    <Button @click="handlecrop3" style="width: 190px;" icon="crop" type="primary">裁剪</Button>
+                                </Col>
+                                <Modal v-model="option3.showCropedImage">
+                                    <p slot="header">预览裁剪之后的图片</p>
+                                    <img :src="option3.cropedImg" alt="" v-if="option3.showCropedImage" style="width: 100%;">
+                                </Modal>
+                            </Row>
+                        </Col>
+                        <Col span="6">
+                            <Row type="flex" justify="center" align="middle" class="image-editor-con3-preview-con">
+                                <div id="preview3"></div>
+                            </Row>
                         </Col>
                     </Row>
                 </Card>
-            </Col>
-        </Row>
-        <Row class="margin-top-10">
-            <Card>
-                <p slot="title">
-                    <Icon type="levels"></Icon>
-                    综合实例
-                </p>
-                <Row :gutter="10">
-                    <Col span="12" class="image-editor-con3">
-                        <div class="cropper3">
-                            <img id="cropimg3" src="../../../images/cropper-test.png" alt="">
-                        </div>
-                    </Col>
-                    <Col span="6" class="image-editor-con3">
-                        <Row>
-                            <Col span="24" class="image-editor-con3-btn-box">
-                                <input type="file" accept="image/png, image/jpeg, image/gif, image/jpg" @change="handleChange3" id="fileinput3" class="fileinput" />
-                                <label class="filelabel filelabel3" for="fileinput3"><Icon type="image"></Icon>&nbsp;选择图片</label>
-                            </Col>
-                        </Row>
-                        <Row class="margin-top-10">
-                            <Col span="24" class="crop3-btn-box">
-                                <Tooltip content="开始裁剪" placement="bottom">
-                                    <Button @click="cropper3.crop()" type="primary"><Icon :size="18" type="checkmark-round"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="取消裁剪" placement="bottom">
-                                    <Button @click="cropper3.clear()" type="primary"><Icon :size="18" type="close-round"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="不可用" placement="bottom">
-                                    <Button @click="cropper3.disable()" type="primary"><Icon :size="18" type="android-lock"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="可用" placement="bottom">
-                                    <Button @click="cropper3.enable()" type="primary"><Icon :size="18" type="android-unlock"></Icon></Button>
-                                </Tooltip>
-                            </Col>
-                        </Row>
-                        <Row class="margin-top-10" :gutter="10">
-                            <Col span="24" class="crop3-btn-box">
-                                <Tooltip content="放大" placement="bottom">
-                                    <Button @click="handlezooml" type="primary"><Icon :size="16" type="plus-round"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="缩小" placement="bottom">
-                                    <Button @click="handlezooms" type="primary"><Icon :size="16" type="minus-round"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="左转" placement="bottom">
-                                    <Button @click="handlerotatel" type="primary"><Icon :size="16" type="arrow-return-left"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="右转" placement="bottom">
-                                    <Button @click="handlerotater" type="primary"><Icon :size="16" type="arrow-return-right"></Icon></Button>
-                                </Tooltip>
-                            </Col>
-                        </Row>
-                        <Row class="margin-top-10" :gutter="10">
-                            <Col span="24" class="crop3-btn-box">
-                                <Tooltip content="左移" placement="bottom">
-                                    <Button @click="handlemovel" type="primary"><Icon :size="18" type="android-arrow-back"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="右移" placement="bottom">
-                                    <Button @click="handlemover" type="primary"><Icon :size="18" type="android-arrow-forward"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="上移" placement="bottom">
-                                    <Button @click="handlemoveu" type="primary"><Icon :size="18" type="android-arrow-up"></Icon></Button>
-                                </Tooltip>
-                                <Tooltip content="下移" placement="bottom">
-                                    <Button @click="handlemoved" type="primary"><Icon :size="18" type="android-arrow-down"></Icon></Button>
-                                </Tooltip>
-                            </Col>
-                        </Row>
-                        <Row class="margin-top-10">
-                            <Col span="24" class="crop3-btn-box">
-                                <Button @click="handlecrop3" style="width: 190px;" icon="crop" type="primary">裁剪</Button>
-                            </Col>
-                            <Modal v-model="option3.showCropedImage">
-                                <p slot="header">预览裁剪之后的图片</p>
-                                <img :src="option3.cropedImg" alt="" v-if="option3.showCropedImage" style="width: 100%;">
-                            </Modal>
-                        </Row>
-                    </Col>
-                    <Col span="6">
-                        <Row type="flex" justify="center" align="middle" class="image-editor-con3-preview-con">
-                            <div id="preview3"></div>
-                        </Row>
-                    </Col>
-                </Row>
-            </Card>
-        </Row>
+            </Row>-->
+        </div>
     </div>
 </template>
 
@@ -165,11 +191,53 @@ export default {
     name: 'image-editor',
     data () {
         return {
-            cropper1: {},
-            option1: {
+            "articles":[
+                {
+                    id: '1',
+                    title: '吃鸡宝典',
+                    author: '烈火人',
+                    introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
+                    createTime:'2017-12-13 12:03:20',
+                    content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
+                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
+                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
+                },
+                {
+                    id: '2',
+                    title: '吃鸡宝典',
+                    author: '烈火人',
+                    introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
+                    createTime:'2017-12-13 12:03:20',
+                    content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
+                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
+                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
+                },
+                {
+                    id: '3',
+                    title: '吃鸡宝典',
+                    author: '烈火人',
+                    introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
+                    createTime:'2017-12-13 12:03:20',
+                    content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
+                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
+                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
+                }
+            ],
+            formBanner: {
+                advertTitle: '',
+                articleId: ''
+            },
+            ruleValidate:{
+                advertTitle:[{required: true, message: '广告标题不能为空', trigger: 'blur'}],
+                articleId:[{required: true, message: '所属文章不能为空', trigger: 'blur'}],
+            },
+            cropper: {},
+            option: {
                 showCropedImage: false,
                 cropedImg: ''
             },
+            isView: false
+            /*,
             cropper2: {},
             cropdata2: {
                 x: '',
@@ -184,25 +252,40 @@ export default {
             option3: {
                 showCropedImage: false,
                 cropedImg: ''
-            }
+            }*/
         };
     },
     methods: {
-        handleChange1 (e) {
+        handleAdvertTitleBlur(){},
+        handleChange (e) {
             let file = e.target.files[0];
             let reader = new FileReader();
             reader.onload = () => {
-                this.cropper1.replace(reader.result);
+                this.cropper.replace(reader.result);
                 reader.onload = null;
             };
             reader.readAsDataURL(file);
         },
-        handlecrop1 () {
-            let file = this.cropper1.getCroppedCanvas().toDataURL();
-            this.option1.cropedImg = file;
-            this.option1.showCropedImage = true;
+        handleCrop () {
+            let file = this.cropper.getCroppedCanvas().toDataURL();
+            this.option.cropedImg = file;
+            this.option.showCropedImage = true;
         },
-        handlerotatel () {
+        handleSaveBanner(formBanner){
+            this.$refs[formBanner].validate((valid) => {
+                if (this.option.cropedImg ==''){this.$Message.info('未选择图片！');return;}
+                if (valid) {
+                    this.$Message.success('Success!');
+                    this.$router.push({
+                        name: 'banner'
+                    });
+                    //保存广告
+                } else {
+                    this.$Message.error('Fail!');
+                }
+            })
+        }
+        /*handlerotatel () {
             if (document.getElementById('fileinput3').files[0]) {
                 this.cropper3.rotate(-30);
             }
@@ -265,21 +348,28 @@ export default {
             let file = this.cropper3.getCroppedCanvas().toDataURL();
             this.option3.cropedImg = file;
             this.option3.showCropedImage = true;
-        }
+        }*/
     },
     mounted () {
-        let img1 = document.getElementById('cropimg1');
-        this.cropper1 = new Cropper(img1, {
-            dragMode: 'move',
-            preview: '#preview1',
-            restore: false,
-            center: false,
-            highlight: false,
-            cropBoxMovable: false,
-            toggleDragModeOnDblclick: false
-        });
+        if ('add' != localStorage.actionType ) {
+            this.formBanner.advertTitle = localStorage.bannerTitle;
+            this.formBanner.articleId = localStorage.bannerArticle;
+            this.formBanner.bannerUrl = localStorage.bannerUrl;
+        }
+        if ('view' != localStorage.actionType){
+            let img = document.getElementById('cropImg');
+            this.cropper = new Cropper(img, {
+                dragMode: 'move',
+                preview: '#preview',
+                restore: false,
+                center: false,
+                highlight: false,
+                cropBoxMovable: false,
+                toggleDragModeOnDblclick: false
+            });
+        }
 
-        let img2 = document.getElementById('cropimg2');
+        /*let img2 = document.getElementById('cropimg2');
         this.cropper2 = new Cropper(img2, {
             dragMode: 'move',
             restore: false,
@@ -307,7 +397,12 @@ export default {
             highlight: false,
             cropBoxMovable: false,
             toggleDragModeOnDblclick: false
-        });
+        });*/
+    },
+    created(){
+        if ('view' == localStorage.actionType ) {
+            this.isView = true;
+        }
     }
 };
 </script>

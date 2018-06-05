@@ -60,13 +60,76 @@ export const otherRouter = {
         { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: () => import('@/views/own-space/own-space.vue') },
         { path: 'order/:order_id', title: '订单详情', name: 'order-info', component: () => import('@/views/advanced-router/component/order-info.vue') }, // 用于展示动态路由
         { path: 'shopping', title: '购物详情', name: 'shopping', component: () => import('@/views/advanced-router/component/shopping-info.vue') }, // 用于展示带参路由
-        { path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue') }
+        { path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue') },
+
+        { path: 'articleView', title: '文章详情', name: 'articleView', component: () => import('@/views/form/article-publish/article-detail.vue') },
+        { path: 'articleAdd', title: '文章新增', name: 'articleAdd', component: () => import('@/views/form/article-publish/article-publish.vue') },
+        { path: 'articleEdit', title: '文章编辑', name: 'articleEdit', component: () => import('@/views/form/article-publish/article-publish.vue') },
+
+        { path: 'bannerView', title: '广告详情', name: 'bannerView', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
+        { path: 'bannerAdd', title: '广告新增', name: 'bannerAdd', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
+        { path: 'bannerEdit', title: '广告编辑', name: 'bannerEdit', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
+
+        { path: 'commentView', title: '评论回复', name: 'commentView', component: () => import('@/views/form/comment/comment-action.vue') },
+        { path: 'commentEdit', title: '评论编辑', name: 'commentEdit', component: () => import('@/views/form/comment/comment-action.vue') },
+
+        { path: 'feedbackView', title: '反馈详情', name: 'feedbackView', component: () => import('@/views/form/system/feedback/feedback-action.vue') },
+        { path: 'feedbackEdit', title: '反馈处理', name: 'feedbackEdit', component: () => import('@/views/form/system/feedback/feedback-action.vue') },
+
+        { path: 'gamesView', title: '游戏详情', name: 'gamesView', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
+        { path: 'gamesAdd', title: '游戏新增', name: 'gamesAdd', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
+        { path: 'gamesEdit', title: '游戏编辑', name: 'gamesEdit', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
+
+        { path: 'usersAction', title: '用户详情', name: 'usersAction', icon: 'compose', component: () => import('@/views/form/user/users-action.vue') }
     ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
     {
+        path: '/form',
+        icon: 'android-checkbox',
+        name: 'form',
+        title: '信息资讯',
+        component: Main,
+        children: [
+            { path: 'article-list', title: '文章管理', name: 'article-list', icon: 'compose', component: () => import('@/views/form/article-publish/article-list.vue') },
+            { path: 'banner', title: 'Banner管理', name: 'banner', icon: 'compose', component: () => import('@/views/form/banner/banner.vue') },
+            { path: 'comment', title: '评论管理', name: 'comment', icon: 'compose', component: () => import('@/views/form/comment/comment.vue') }
+        ]
+    },
+    {
+        path: '/system',
+        icon: 'android-checkbox',
+        name: 'system',
+        title: '系统管理',
+        component: Main,
+        children: [
+            { path: 'about', title: '小程序', name: 'about', icon: 'compose', component: () => import('@/views/form/system/about/about.vue') },
+            { path: 'feedback', title: '反馈意见管理', name: 'feedback', icon: 'compose', component: () => import('@/views/form/system/feedback/feedback.vue') }
+        ]
+    },
+    {
+        path: '/game',
+        icon: 'android-checkbox',
+        name: 'system',
+        title: '游戏管理',
+        component: Main,
+        children: [
+            { path: 'games', title: '游戏列表', name: 'games', icon: 'compose', component: () => import('@/views/form/game/games.vue') }
+        ]
+    },
+    {
+        path: '/user',
+        icon: 'android-checkbox',
+        name: 'user',
+        title: '用户管理',
+        component: Main,
+        children: [
+            { path: 'users', title: '用户列表', name: 'users', icon: 'compose', component: () => import('@/views/form/user/users.vue') }
+        ]
+    }
+    /*{
         path: '/access',
         icon: 'key',
         name: 'access',
@@ -228,7 +291,7 @@ export const appRouter = [
         children: [
             { path: 'index', title: '错误页面', name: 'errorpage_index', component: () => import('@/views/error-page/error-page.vue') }
         ]
-    }
+    }*/
 ];
 
 // 所有上面定义的路由都要写在下面的routers里
