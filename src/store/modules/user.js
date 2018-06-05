@@ -32,16 +32,18 @@ export default {
     handleLogin ({ commit }, {username, password}) {
       username = username.trim()
       return new Promise((resolve, reject) => {
-        login({
-          username,
-          password
-        }).then(res => {
-          const data = res.data
-          commit('setToken', data.access_token)
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
+        // login({
+        //   username,
+        //   password
+        // }).then(res => {
+        //   const data = res.data
+        //   commit('setToken', data.access_token)
+        //   resolve()
+        // }).catch(err => {
+        //   reject(err)
+        // })
+        commit('setToken', 'zzz')
+        resolve()
       })
     },
     // 退出登录
@@ -63,16 +65,21 @@ export default {
     // 获取用户相关信息
     getUserInfo ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(res => {
-          const data = res.data
-          commit('setAvator', data.avator)
-          commit('setUserName', data.user_name)
-          commit('setUserId', data.user_id)
-          commit('setAccess', data.access)
-          resolve(data)
-        }).catch(err => {
-          reject(err)
-        })
+        // getUserInfo(state.token).then(res => {
+        //   const data = res.data
+        //   commit('setAvator', data.avator)
+        //   commit('setUserName', data.user_name)
+        //   commit('setUserId', data.user_id)
+        //   commit('setAccess', data.access)
+        //   resolve(data)
+        // }).catch(err => {
+        //   reject(err)
+        // })
+        commit('setAvator', 'avator')
+        commit('setUserName', 'user_name')
+        commit('setUserId', 'user_id')
+        commit('setAccess', [0])
+        resolve()
       })
     }
   }
