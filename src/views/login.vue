@@ -12,8 +12,8 @@
                 </p>
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules">
-                        <FormItem prop="userName">
-                            <Input v-model="form.userName" placeholder="请输入用户名">
+                        <FormItem prop="username">
+                            <Input v-model="form.username" placeholder="请输入用户名">
                                 <span slot="prepend">
                                     <Icon :size="16" type="person"></Icon>
                                 </span>
@@ -39,15 +39,16 @@
 
 <script>
 import Cookies from 'js-cookie';
+// import { login } from '@/api/user'
 export default {
     data () {
         return {
             form: {
-                userName: 'iview_admin',
-                password: ''
+                username: 'admin',
+                password: 'Abc123'
             },
             rules: {
-                userName: [
+                username: [
                     { required: true, message: '账号不能为空', trigger: 'blur' }
                 ],
                 password: [
@@ -60,17 +61,16 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    Cookies.set('user', this.form.userName);
-                    Cookies.set('password', this.form.password);
                     this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                    if (this.form.userName === 'iview_admin') {
+                    this.$api.login(this.form.username, this.form.password).then(res => {
+                        Cookies.set('user', this.form.username);
+                        Cookies.set('password', this.form.password);
                         Cookies.set('access', 0);
-                    } else {
-                        Cookies.set('access', 1);
-                    }
-                    this.$router.push({
-                        name: 'home_index'
-                    });
+                        sessionStorage.setItem('access_token', (res.token_type + ' ' + res.access_token))
+                        this.$router.push({
+                            name: 'home_index'
+                        });
+                    })
                 }
             });
         }
