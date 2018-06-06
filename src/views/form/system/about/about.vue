@@ -71,7 +71,7 @@ export default {
         id: '1',
         company: '组起',
         introduction: '好友游戏匹配神器',
-        logo: '../../../images/logo.jpg'
+        logo: ''
       },
       ruleValidate: {
         company: [{required: true, message: '公司名称不能为空', trigger: 'blur'}],
@@ -102,6 +102,9 @@ export default {
     handleSaveBanner (formAbout) {
       this.$refs[formAbout].validate((valid) => {
         if (valid) {
+            this.$api.updateAbout(this.formAbout).then(res => {
+                
+            })
           this.$Message.success('Success!')
           // 保存广告
         } else {
@@ -109,11 +112,11 @@ export default {
         }
       })
     }
-    /* handleReset (name) {
-                this.$refs[name].resetFields();
-            } */
   },
   mounted () {
+    this.$api.getAbout().then(res => {
+      this.formAbout = res.data
+    })
     if (localStorage.bannerType != 'add') {
       // document.getElementById('cropImg').src=localStorage.bannerUrl;
       // this.formAbout.company = localStorage.aboutCompany;

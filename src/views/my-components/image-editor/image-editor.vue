@@ -16,15 +16,18 @@
                         <Form ref="formBanner" :model="formBanner" :rules="ruleValidate" :label-width="80" >
                             <Row>
                                 <Col span="10">
-                                    <FormItem label="广告标题" prop="advertTitle">
-                                        <Input v-model="formBanner.advertTitle" :readonly="isView" @on-blur="handleAdvertTitleBlur" icon="android-list"/>
+                                    <FormItem label="广告标题" prop="title">
+                                        <Input v-model="formBanner.title" :readonly="isView" @on-blur="handleAdvertTitleBlur" icon="android-list"/>
                                     </FormItem>
                                 </Col>
                                 <Col span="10">
-                                    <FormItem label="所属文章" prop="articleId">
-                                        <Select v-model="formBanner.articleId" :disabled="isView">
-                                            <Option v-for="item in articles" :value="item.id">{{item.title}}</Option>
-                                        </Select>
+                                    <FormItem label="广告图片" prop="advertUrl">
+                                        <Input v-model="formBanner.advertUrl" :readonly="isView"  icon="android-list"/>
+                                    </FormItem>
+                                </Col>
+                                <Col span="10">
+                                    <FormItem label="文章ID" prop="articleId">
+                                        <Input v-model="formBanner.articleId" :readonly="isView"  icon="android-list"/>
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -191,45 +194,16 @@ export default {
     name: 'image-editor',
     data () {
         return {
-            "articles":[
-                {
-                    id: '1',
-                    title: '吃鸡宝典',
-                    author: '烈火人',
-                    introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                    createTime:'2017-12-13 12:03:20',
-                    content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
-                },
-                {
-                    id: '2',
-                    title: '吃鸡宝典',
-                    author: '烈火人',
-                    introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                    createTime:'2017-12-13 12:03:20',
-                    content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
-                },
-                {
-                    id: '3',
-                    title: '吃鸡宝典',
-                    author: '烈火人',
-                    introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                    createTime:'2017-12-13 12:03:20',
-                    content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                    '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
-                }
-            ],
+           
             formBanner: {
-                advertTitle: '',
-                articleId: ''
+                title: '',
+                articleId: '',
+                advertUrl: ''
             },
             ruleValidate:{
-                advertTitle:[{required: true, message: '广告标题不能为空', trigger: 'blur'}],
+                title:[{required: true, message: '广告标题不能为空', trigger: 'blur'}],
                 articleId:[{required: true, message: '所属文章不能为空', trigger: 'blur'}],
+                advertUrl:[{required: true, message: '图片地址不能为空', trigger: 'blur'}]
             },
             cropper: {},
             option: {
@@ -273,88 +247,38 @@ export default {
         },
         handleSaveBanner(formBanner){
             this.$refs[formBanner].validate((valid) => {
-                if (this.option.cropedImg ==''){this.$Message.info('未选择图片！');return;}
+                // if (this.option.cropedImg ==''){this.$Message.info('未选择图片！');return;}
                 if (valid) {
-                    this.$Message.success('Success!');
-                    this.$router.push({
-                        name: 'banner'
-                    });
+                    if ('add' != localStorage.actionType ) {
+                        var id = localStorage.bannerId
+                        this.$api.updateBanner(id, this.formBanner).then(res => {
+                            this.$Message.success('Success!');
+                            this.$router.push({
+                                name: 'banner'
+                            });
+                        })
+                    } else {
+                        this.$api.createBanner(this.formBanner).then(res => {
+                            this.$Message.success('Success!');
+                            this.$router.push({
+                                name: 'banner'
+                            });
+                        })
+                    }
+                    
                     //保存广告
                 } else {
                     this.$Message.error('Fail!');
                 }
             })
         }
-        /*handlerotatel () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.rotate(-30);
-            }
-        },
-        handlerotater () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.rotate(90);
-            }
-        },
-        handlezooml () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.zoom(0.1);
-            }
-        },
-        handlezooms () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.zoom(-0.1);
-            }
-        },
-        handlescalex () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.scaleX(-this.cropper3.getData().scaleX);
-            }
-        },
-        handlescaley () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.scaleY(-this.cropper3.getData().scaleY);
-            }
-        },
-        handleChange3 (e) {
-            let file = e.target.files[0];
-            let reader = new FileReader();
-            reader.onload = () => {
-                this.cropper3.replace(reader.result, true); // 这里必须设置true这个参数，否则旋转会有bug
-                reader.onload = null;
-            };
-            reader.readAsDataURL(file);
-        },
-        handlemovel () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.move(-10, 0);
-            }
-        },
-        handlemover () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.move(10, 0);
-            }
-        },
-        handlemoveu () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.move(0, -10);
-            }
-        },
-        handlemoved () {
-            if (document.getElementById('fileinput3').files[0]) {
-                this.cropper3.move(0, 10);
-            }
-        },
-        handlecrop3 () {
-            let file = this.cropper3.getCroppedCanvas().toDataURL();
-            this.option3.cropedImg = file;
-            this.option3.showCropedImage = true;
-        }*/
     },
     mounted () {
         if ('add' != localStorage.actionType ) {
-            this.formBanner.advertTitle = localStorage.bannerTitle;
+            var id = localStorage.bannerId
+            this.formBanner.title = localStorage.bannerTitle;
             this.formBanner.articleId = localStorage.bannerArticle;
-            this.formBanner.bannerUrl = localStorage.bannerUrl;
+            this.formBanner.advertUrl = localStorage.bannerUrl;
         }
         if ('view' != localStorage.actionType){
             let img = document.getElementById('cropImg');

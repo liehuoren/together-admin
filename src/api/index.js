@@ -4,11 +4,14 @@ import user from './user'
 import article from './article'
 import banner from './banner'
 import discuss from './discuss'
+import system from './system'
+import game from './game'
 
 // axios设置默认值
 axios.defaults.timeout = 15000
-axios.defaults.baseURL = 'https://together-api.zhlzzz.com'
-// axios.defaults.baseURL = '/api'
+// axios.defaults.baseURL = 'https://together-api.zhlzzz.com'
+
+axios.defaults.baseURL = '/api'
 axios.defaults.headers = {
   'Content-Type': 'application/json;charset=UTF-8'
 }
@@ -17,7 +20,9 @@ const api = {
   ...user, // 登录相关api
   ...article,
   ...banner,
-  ...discuss
+  ...discuss,
+  ...system,
+  ...game
 }
 
 // 注册vue插件

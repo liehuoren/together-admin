@@ -15,27 +15,15 @@
 </template>
 
 <script>
-let testData = {
-  'feedbacks': [
-    {
-      id: '1',
-      userId: '1',
-      email: '1234567890@qq.com',
-      content: '意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见',
-      createTime: '2017-12-13 12:03:20',
-      finished: true
-    }
-  ]
-}
 export default {
   name: 'feedback',
   data () {
     return {
       ajaxFeedbackData: [],
       // 初始化信息总条数
-      dataCount: 15,
+      dataCount: 0,
       // 每页显示多少条
-      pageSize: 10,
+      pageSize: 100,
       feedbacks: [
         {
           title: '意见标识',
@@ -149,10 +137,16 @@ export default {
       var _start = (index - 1) * this.pageSize
       var _end = index * this.pageSize
       this.feedbackData = this.ajaxFeedbackData.slice(_start, _end)
+    },
+    getFeedbackList() {
+      this.$api.getFeedbackList().then(res => {
+        this.feedbackData = res.data
+        this.dataCount = res.data.length
+      })
     }
   },
   created () {
-    this.handleListApproveBanner()
+    this.getFeedbackList()
   }
 }
 </script>

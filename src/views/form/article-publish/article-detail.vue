@@ -14,9 +14,6 @@
                             <h4 class="detail-publish-author">{{author}}</h4>
                             <p class="detail-publish-time"><Icon type="android-alarm-clock"></Icon>&nbsp;发布时间：{{ createTime }}</p>
                             <div class="detail-content-con" v-html="content"></div>
-                            <!--<div class="detail-line">
-                                <Button class="detail-line-button common-button" @click="goBack" >返回</Button>
-                            </div>-->
                         </Card>
                     </div>
                 </Col>

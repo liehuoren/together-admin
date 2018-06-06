@@ -52,7 +52,8 @@ module.exports = merge(webpackBaseConfig, {
             //匹配代理的url
             '/api': {
             // 目标服务器地址
-              target: 'http://127.0.0.1:8090',
+            //   target: 'http://127.0.0.1:8090',
+            target: 'https://together-api.zhlzzz.com',
               //路径重写
               pathRewrite: {'^/api' : ''},
               changeOrigin: true
