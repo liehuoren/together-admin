@@ -5,152 +5,30 @@
 
 <template>
     <div class="common-div">
-        <!--<Row>
-            <Col span="18">-->
-                <Card>
-                    <Form :label-width="80">
-                        <FormItem label="文章标题" :error="articleError">
-                            <Input v-model="articleTitle" @on-blur="handleArticleTitleBlur" icon="android-list"/>
-                        </FormItem>
-                       <!-- <div class="article-link-con">
-                            <transition name="fixed-link">
-                                <FormItem v-show="showLink" label="固定链接">
-                                    <span>
-                                        <span key="pathfixedtext">{{ fixedLink }}</span><span key="pathText" v-if="!editLink">{{ articlePath }}</span>
-                                        <Input key="pathInput" v-model="articlePath" style="display:inline-block;width:auto"  v-else/>
-                                    </span>
-                                    <span style="float:right;">
-                                        <Button :type="editPathButtonType" @click="editArticlePath">{{ editPathButtonText }}</Button>
-                                    </span>
-                                </FormItem>
-                            </transition>
-                        </div>-->
-                    </Form>
-                    <Row class="margin-top-0 publish-button-con">
-                        <!--<span class="publish-button"><Button @click="handleCancel">取消</Button></span>-->
-                        <span class="publish-button"><Button class="common-button" @click="handlePreview">预览</Button></span>
-                        <span class="publish-button"><Button class="common-button" @click="handleSaveDraft">保存</Button></span>
-                        <!--<span class="publish-button"><Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button></span>-->
-                    </Row>
-                    <div class="margin-top-20">
-                        <textarea id="articleEditor"></textarea>
-                    </div>
-                </Card>
-            <!--</Col>-->
-            <!--<Col span="6" class="padding-left-10">
-                <Card>
-                    <p slot="title">
-                        <Icon type="paper-airplane"></Icon>
-                        发布
-                    </p>
-                    <p class="margin-top-10">
-                        <Icon type="android-time"></Icon>&nbsp;&nbsp;状&nbsp;&nbsp;&nbsp; 态：
-                        <Select size="small" style="width:90px" value="草稿">
-                            <Option v-for="item in articleStateList" :value="item.value" :key="item.value">{{ item.value }}</Option>
-                        </Select>
-                    </p>
-                    <p class="margin-top-10">
-                        <Icon type="eye"></Icon>&nbsp;&nbsp;公开度：&nbsp;<b>{{ Openness }}</b>
-                        <Button v-show="!editOpenness" size="small" @click="handleEditOpenness" type="text">修改</Button>
-                        <transition name="openness-con">
-                            <div v-show="editOpenness" class="openness-radio-con">
-                                <RadioGroup v-model="currentOpenness" vertical>
-                                    <Radio label="公开">
-                                        公开
-                                        <Checkbox v-show="currentOpenness === '公开'" v-model="topArticle">在首页置顶这篇文章</Checkbox>
-                                    </Radio>
-                                    <Radio label="密码">
-                                        密码
-                                        <Input v-show="currentOpenness === '密码'" style="width:120px" size="small" placeholder="请输入密码"/>
-                                    </Radio>
-                                    <Radio label="私密"></Radio>
-                                </RadioGroup>
-                                <div>
-                                    <Button type="primary" @click="handleSaveOpenness">确认</Button>
-                                    <Button type="ghost" @click="cancelEditOpenness">取消</Button>
-                                </div>
-                            </div>
-                        </transition>
-                    </p>
-                    <p class="margin-top-10">
-                        <Icon type="ios-calendar-outline"></Icon>&nbsp;&nbsp;
-                        <span v-if="publishTimeType === 'immediately'">立即发布</span><span v-else>定时：{{ publishTime }}</span>
-                        <Button v-show="!editPublishTime" size="small" @click="handleEditPublishTime" type="text">修改</Button>
-                        <transition name="publish-time">
-                            <div v-show="editPublishTime" class="publish-time-picker-con">
-                                <div class="margin-top-10">
-                                    <DatePicker @on-change="setPublishTime" type="datetime" style="width:200px;" placeholder="选择日期和时间" ></DatePicker>
-                                </div>
-                                <div class="margin-top-10">
-                                    <Button type="primary" @click="handleSavePublishTime">确认</Button>
-                                    <Button type="ghost" @click="cancelEditPublishTime">取消</Button>
-                                </div>
-                            </div>
-                        </transition>
-                    </p>
-                    <Row class="margin-top-20 publish-button-con">
-                        <span class="publish-button"><Button @click="handlePreview">预览</Button></span>
-                        <span class="publish-button"><Button @click="handleSaveDraft">保存草稿</Button></span>
-                        <span class="publish-button"><Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button></span>
-                    </Row>
-                </Card>
-                <div class="margin-top-10">
-                    <Card>
-                        <p slot="title">
-                            <Icon type="navicon-round"></Icon>
-                            分类目录
-                        </p>
-                        <Tabs type="card">
-                            <TabPane label="所有分类目录">
-                                <div class="classification-con">
-                                    <Tree :data="classificationList" @on-check-change="setClassificationInAll" show-checkbox></Tree>
-                                </div>
-                            </TabPane>
-                            <TabPane label="常用目录">
-                                <div class="classification-con">
-                                    <CheckboxGroup v-model="offenUsedClassSelected" @on-change="setClassificationInOffen">
-                                        <p v-for="item in offenUsedClass" :key="item.title">
-                                            <Checkbox :label="item.title">{{ item.title }}</Checkbox>
-                                        </p>
-                                    </CheckboxGroup>
-                                </div>
-                            </TabPane>
-                        </Tabs>
-                    </Card>
-                </div>
-                <div class="margin-top-10">
-                    <Card>
-                        <p slot="title">
-                            <Icon type="ios-pricetags-outline"></Icon>
-                            标签
-                        </p>
-                        <Row>
-                            <Col span="18">
-                                <Select v-model="articleTagSelected" multiple @on-change="handleSelectTag" placeholder="请选择文章标签">
-                                    <Option v-for="item in articleTagList" :value="item.value" :key="item.value">{{ item.value }}</Option>
-                                </Select>
-                            </Col>
-                            <Col span="6" class="padding-left-10">
-                                <Button v-show="!addingNewTag" @click="handleAddNewTag" long type="ghost">新建</Button>
-                            </Col>
-                        </Row>
-                        <transition name="add-new-tag">
-                            <div v-show="addingNewTag" class="add-new-tag-con">
-                                <Col span="14">
-                                    <Input v-model="newTagName" placeholder="请输入标签名" />
-                                </Col>
-                                <Col span="5" class="padding-left-10">
-                                    <Button @click="createNewTag" long type="primary">确定</Button>
-                                </Col>
-                                <Col span="5" class="padding-left-10">
-                                    <Button @click="cancelCreateNewTag" long type="ghost">取消</Button>
-                                </Col>
-                            </div>
-                        </transition>
-                    </Card>
-                </div>
-            </Col>-->
-        <!--</Row>-->
+        <Card>
+            <Form :label-width="80">
+                <FormItem label="文章标题" :error="articleError">
+                    <Input v-model="article.title" @on-blur="handleTitleBlur" icon="android-list"/>
+                </FormItem>
+                <FormItem label="文章作者" :error="articleError">
+                    <Input v-model="article.author" @on-blur="handleAuthorBlur" icon="android-list"/>
+                </FormItem>
+                <FormItem label="文章简介" :error="articleError">
+                    <Input v-model="article.introduction"  icon="android-list"/>
+                </FormItem>
+                <FormItem label="文章头图" :error="articleError">
+                    <Input v-model="article.imgUrl" icon="android-list"/>
+                </FormItem>
+               
+            </Form>
+            <div class="margin-top-20">
+                <textarea id="articleEditor"></textarea>
+            </div>
+            <Row class="margin-top-0 publish-button-con">
+                <!-- <span class="publish-button"><Button class="common-button" @click="handlePreview">预览</Button></span> -->
+                <span class="publish-button"><Button class="common-button" @click="handleSaveDraft">保存</Button></span>
+            </Row>
+        </Card>
     </div>
 </template>
 
@@ -161,7 +39,13 @@ export default {
   name: 'artical-publish',
   data () {
     return {
-      articleTitle: '',
+      article: {
+        title: '',
+        author: '', 
+        imgUrl: 'http://p6rwlbhj0.bkt.clouddn.com/image/together/3.jpg',
+        introduction: '',
+        content: ''
+      },
       articleError: '',
       showLink: false,
       fixedLink: '',
@@ -191,27 +75,18 @@ export default {
     }
   },
   methods: {
-    handleArticleTitleBlur () {
-      if (this.articleTitle.length !== 0) {
-        // this.articleError = '';
-        localStorage.articleTitle = this.articleTitle // 本地存储文章标题
-        if (!this.articlePathHasEdited) {
-          let date = new Date()
-          let year = date.getFullYear()
-          let month = date.getMonth() + 1
-          let day = date.getDate()
-          this.fixedLink = window.location.host + '/' + year + '/' + month + '/' + day + '/'
-          this.articlePath = this.articleTitle
-          this.articlePathHasEdited = true
-          this.showLink = true
-        }
-      } else {
-        // this.articleError = '文章标题不可为空哦';
+    handleTitleBlur () {
+      if (this.article.title == '') {
         this.$Message.error('文章标题不可为空哦')
       }
     },
+    handleAuthorBlur () {
+      if (this.article.author == '') {
+        this.$Message.error('文章作者不可为空哦')
+      }
+    },
     canPublish () {
-      if (this.articleTitle.length === 0) {
+      if (this.articleTitle == '') {
         this.$Message.error('请输入文章标题')
         return false
       } else {
@@ -238,105 +113,25 @@ export default {
     },
     handleSaveDraft () {
       if (this.canPublish()) {
-        let date = new Date()
-        let year = date.getFullYear()
-        let month = date.getMonth() + 1
-        let day = date.getDate()
-        let hour = date.getHours()
-        let minute = date.getMinutes()
-        let second = date.getSeconds()
-        let content = tinymce.activeEditor.getContent()
-        let newArticle = {
-          // id: localStorage.testData.length,
-          title: this.articleTitle,
-          author: Cookies.get('user'),
-          introduction: content.substring(0, 100),
-          createTime: year + '-' + month + '-' + day + '  ' + hour + ':' + minute + ':' + second,
-          content: content
+
+        this.article.content = tinymce.activeEditor.getContent()
+
+        if (localStorage.actionType != 'add') {
+            var id = localStorage.articleId
+            this.$api.updateArticle(id, this.article).then(res => {
+                this.$router.push({
+                  name: 'article-list'
+                })
+            })
         }
-        // localStorage.testData.article.push(newArticle);
-        this.$router.push({
-          name: 'article-list'
+        this.$api.createArticle(this.article).then(res => {
+            this.$router.push({
+              name: 'article-list'
+            })
         })
+        
       }
     }
-    /* handleCancel(){
-            this.$router.push({
-                name: 'article-list'
-            });
-        },
-        editArticlePath () {
-            this.editLink = !this.editLink;
-            this.editPathButtonType = this.editPathButtonType === 'ghost' ? 'success' : 'ghost';
-            this.editPathButtonText = this.editPathButtonText === '编辑' ? '完成' : '编辑';
-        },
-        handleEditOpenness () {
-            this.editOpenness = !this.editOpenness;
-        },
-        handleSaveOpenness () {
-            this.Openness = this.currentOpenness;
-            this.editOpenness = false;
-        },
-        cancelEditOpenness () {
-            this.currentOpenness = this.Openness;
-            this.editOpenness = false;
-        },
-        handleEditPublishTime () {
-            this.editPublishTime = !this.editPublishTime;
-        },
-        handleSavePublishTime () {
-            this.publishTimeType = 'timing';
-            this.editPublishTime = false;
-        },
-        cancelEditPublishTime () {
-            this.publishTimeType = 'immediately';
-            this.editPublishTime = false;
-        },
-        setPublishTime (datetime) {
-            this.publishTime = datetime;
-        },
-        setClassificationInAll (selectedArray) {
-            this.classificationFinalSelected = selectedArray.map(item => {
-                return item.title;
-            });
-            localStorage.classificationSelected = JSON.stringify(this.classificationFinalSelected); // 本地存储所选目录列表
-        },
-        setClassificationInOffen (selectedArray) {
-            this.classificationFinalSelected = selectedArray;
-        },
-        handleAddNewTag () {
-            this.addingNewTag = !this.addingNewTag;
-        },
-        createNewTag () {
-            if (this.newTagName.length !== 0) {
-                this.articleTagList.push({value: this.newTagName});
-                this.addingNewTag = false;
-                setTimeout(() => {
-                    this.newTagName = '';
-                }, 200);
-            } else {
-                this.$Message.error('请输入标签名');
-            }
-        },
-        cancelCreateNewTag () {
-            this.newTagName = '';
-            this.addingNewTag = false;
-        },
-        handlePublish () {
-            if (this.canPublish()) {
-                this.publishLoading = true;
-                setTimeout(() => {
-                    this.publishLoading = false;
-                    this.$Notice.success({
-                        title: '保存成功',
-                        desc: '文章《' + this.articleTitle + '》保存成功'
-                    });
-                }, 1000);
-            }
-        },
-        handleSelectTag () {
-            localStorage.tagsList = JSON.stringify(this.articleTagSelected); // 本地存储文章标签列表
-        } */
   },
   computed: {
     completeUrl () {
@@ -346,93 +141,6 @@ export default {
     }
   },
   mounted () {
-    /* this.articleTagList = [
-            {value: 'vue'},
-            {value: 'iview'},
-            {value: 'ES6'},
-            {value: 'webpack'},
-            {value: 'babel'},
-            {value: 'eslint'}
-        ];
-        this.classificationList = [
-            {
-                title: 'Vue实例',
-                expand: true,
-                children: [
-                    {
-                        title: '数据与方法',
-                        expand: true
-                    },
-                    {
-                        title: '生命周期',
-                        expand: true
-                    }
-                ]
-            },
-            {
-                title: 'Class与Style绑定',
-                expand: true,
-                children: [
-                    {
-                        title: '绑定HTML class',
-                        expand: true,
-                        children: [
-                            {
-                                title: '对象语法',
-                                expand: true
-                            },
-                            {
-                                title: '数组语法',
-                                expand: true
-                            },
-                            {
-                                title: '用在组件上',
-                                expand: true
-                            }
-                        ]
-                    },
-                    {
-                        title: '生命周期',
-                        expand: true
-                    }
-                ]
-            },
-            {
-                title: '模板语法',
-                expand: true,
-                children: [
-                    {
-                        title: '插值',
-                        expand: true
-                    },
-                    {
-                        title: '指令',
-                        expand: true
-                    },
-                    {
-                        title: '缩写',
-                        expand: true
-                    }
-                ]
-            }
-        ];
-        this.offenUsedClass = [
-            {
-                title: 'vue实例'
-            },
-            {
-                title: '生命周期'
-            },
-            {
-                title: '模板语法'
-            },
-            {
-                title: '插值'
-            },
-            {
-                title: '缩写'
-            }
-        ]; */
     tinymce.init({
       selector: '#articleEditor',
       branding: false,
@@ -456,8 +164,11 @@ export default {
       }
     })
     if (localStorage.actionType != 'add') {
-      this.articleTitle = localStorage.articleTitle
-      tinymce.activeEditor.setContent(localStorage.articleContent)
+        var id = localStorage.articleId
+        this.$api.getArticle(id).then(res => {
+            this.article = res.data
+            tinymce.activeEditor.setContent(this.article.content)
+        })
     }
   },
   destroyed () {

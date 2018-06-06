@@ -14,9 +14,6 @@
                             <h4 class="detail-publish-author">{{author}}</h4>
                             <p class="detail-publish-time"><Icon type="android-alarm-clock"></Icon>&nbsp;发布时间：{{ createTime }}</p>
                             <div class="detail-content-con" v-html="content"></div>
-                            <!--<div class="detail-line">
-                                <Button class="detail-line-button common-button" @click="goBack" >返回</Button>
-                            </div>-->
                         </Card>
                     </div>
                 </Col>
@@ -29,6 +26,7 @@
 export default {
   data () {
     return {
+      id: '',
       articleTitle: '',
       author: '',
       content: '',
@@ -43,10 +41,14 @@ export default {
     }
   },
   mounted () {
-    this.articleTitle = localStorage.articleTitle
-    this.author = localStorage.articleAuthor
-    this.createTime = localStorage.articleCreate
-    this.content = localStorage.articleContent
+    this.id = localStorage.articleId
+    this.$api.getArticle(this.id).then(res => {
+        this.articleTitle = res.data.title
+        this.author = res.data.author
+        this.createTime = res.data.createTime
+        this.content = res.data.content
+    })
+    
   }
 }
 </script>

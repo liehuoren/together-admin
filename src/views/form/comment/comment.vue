@@ -15,32 +15,7 @@
 </template>
 
 <script>
-let testData = {
-  'comments': [
-    {
-      id: '1',
-      audit: true,
-      toTop: true,
-      articleId: '1',
-      userId: '1',
-      content: '评论评论评论评论评论评论评论评论评论评论评论评论评论评论',
-      replyContent: '回复回复回复回复回复回复回复回复回复回复回复回复回复',
-      createTime: '2017-12-13 12:03:20',
-      replyTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      audit: true,
-      toTop: true,
-      articleId: '1',
-      userId: '1',
-      content: '评论评论评论评论评论评论评论评论评论评论评论评论评论评论',
-      replyContent: '回复回复回复回复回复回复回复回复回复回复回复回复回复',
-      createTime: '2017-12-13 12:03:20',
-      replyTime: '2017-12-13 12:03:20'
-    }
-  ]
-}
+
 export default {
   name: 'comment',
   data () {
@@ -155,7 +130,11 @@ export default {
           }
         }
       ],
-      commentData: []
+      commentData: [],
+      pageData: {
+        cursor: 1,
+        limit: 10
+      }
     }
   },
   methods: {
@@ -190,25 +169,20 @@ export default {
     remove (index) {
       this.commentData.splice(index, 1)
     },
-    handleListApproveComment () {
-      // 保存取到的所有数据
-      this.ajaxCommentData = testData.comments
-      this.dataCount = testData.comments.length
-      // 初始化显示，小于每页显示条数，全显，大于每页显示条数，取前每页条数显示
-      if (testData.comments.length < this.pageSize) {
-        this.commentData = this.ajaxCommentData
-      } else {
-        this.commentData = this.ajaxCommentData.slice(0, this.pageSize)
-      }
+    getDiscussList (pageData) {
+      this.$api.getDiscussList(pageData).then(res => {
+        console.log(res)
+        this.commentData = res.data
+        this.dataCount = res.headers['x-slice-total-count']
+      })
     },
     changePage (index) {
-      var _start = (index - 1) * this.pageSize
-      var _end = index * this.pageSize
-      this.commentData = this.ajaxCommentData.slice(_start, _end)
+      this.pageData.cursor = index
+      this.getDiscussList (this.pageData)
     }
   },
   created () {
-    this.handleListApproveComment()
+    this.getDiscussList(this.pageData)
   }
 }
 </script>

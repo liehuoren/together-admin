@@ -9,128 +9,13 @@
         </div>
         <div class="common-page">
             <Page :total="dataCount" :page-size="pageSize"  show-total  @on-change="changePage"></Page>
-
         </div>
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
 let testData = {
   'articles': [
-     {
-                id: '1',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20',
-                content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
-            },
-            {
-                id: '2',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20',
-                content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
-            },
-            {
-                id: '3',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20',
-                content:'吃鸡宝典正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文' +
-                '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文'
-            },
-            {
-                id: '4',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '5',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '6',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '7',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '8',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '9',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '10',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '11',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '12',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '13',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '14',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            },
-            {
-                id: '15',
-                title: '吃鸡宝典',
-                author: '烈火人',
-                introduction:'吃鸡宝典，简介简介简介简介简介简介简介简介简介简介',
-                createTime:'2017-12-13 12:03:20'
-            }
+         
   ]
 }
 export default {
@@ -138,7 +23,7 @@ export default {
     return {
       ajaxArticleData: [],
       // 初始化信息总条数
-      dataCount: 15,
+      dataCount: 20,
       // 每页显示多少条
       pageSize: 10,
       articles: [
@@ -228,21 +113,23 @@ export default {
           }
         }
       ],
-      articleData: []
+      articleData: [],
+      pageData: {
+        cursor: 1,
+        limit: 10
+      }
     }
   },
   methods: {
-    ...mapActions('article', [
-      'handleArticleList'
-    ]),
-    getArticles () {
-      this.ajaxArticleData = this.handleArticleList()
+    getArticles (pageData) {
+      this.$api.getArticleList(pageData).then(res => {
+        console.log(res)
+        this.articleData = res.data
+        this.dataCount = res.headers['x-slice-total-count']
+      })
     },
     handleAddArticle () {
       localStorage.actionType = 'add'
-      // this.$router.push({
-      //     name: 'articlePublish',
-      // });
       this.$router.push({
         name: 'articleAdd'
       })
@@ -250,10 +137,6 @@ export default {
     show (index) {
       localStorage.actionType = 'view'
       localStorage.articleId = this.articleData[index].id
-      localStorage.articleTitle = this.articleData[index].title
-      localStorage.articleAuthor = this.articleData[index].author
-      localStorage.articleCreate = this.articleData[index].createTime
-      localStorage.articleContent = this.articleData[index].content
       this.$router.push({
         name: 'articleView'
       })
@@ -261,10 +144,6 @@ export default {
     edit (index) {
       localStorage.actionType = 'update'
       localStorage.articleId = this.articleData[index].id
-      localStorage.articleTitle = this.articleData[index].title
-      localStorage.articleAuthor = this.articleData[index].author
-      localStorage.articleCreate = this.articleData[index].createTime
-      localStorage.articleContent = this.articleData[index].content
       this.$router.push({
         name: 'articleEdit'
       })
@@ -285,13 +164,12 @@ export default {
       }
     },
     changePage (index) {
-      var _start = (index - 1) * this.pageSize
-      var _end = index * this.pageSize
-      this.articleData = this.ajaxArticleData.slice(_start, _end)
+      this.pageData.cursor = index
+      this.getArticles(this.pageData)
     }
   },
   created () {
-    this.getArticles()
+    this.getArticles(this.pageData)
     this.handleListApproveArticle()
   }
 }

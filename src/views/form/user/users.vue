@@ -15,19 +15,7 @@
 </template>
 
 <script>
-let testData = {
-  'users': [
-    {
-      id: '1',
-      phone: '12345678901',
-      nickName: '昵称',
-      avatarUrl: '../../../images/logo.jpg',
-      gender: 1,
-      createTime: '2017-12-13 12:03:20',
-      lastLoginTime: '2017-12-13 12:03:20'
-    }
-  ]
-}
+
 export default {
   name: 'users',
   data () {
@@ -95,7 +83,11 @@ export default {
           }
         }
       ],
-      userData: []
+      userData: [],
+      pageData: {
+        cursor: 1,
+        limit: 10
+      }
     }
   },
   methods: {
@@ -112,25 +104,19 @@ export default {
         name: 'usersAction'
       })
     },
-    handleListApproveUser () {
-      // 保存取到的所有数据
-      this.ajaxUserData = testData.users
-      this.dataCount = testData.users.length
-      // 初始化显示，小于每页显示条数，全显，大于每页显示条数，取前每页条数显示
-      if (testData.users.length < this.pageSize) {
-        this.userData = this.ajaxUserData
-      } else {
-        this.userData = this.ajaxUserData.slice(0, this.pageSize)
-      }
-    },
     changePage (index) {
-      var _start = (index - 1) * this.pageSize
-      var _end = index * this.pageSize
-      this.userData = this.ajaxUserData.slice(_start, _end)
+      this.pageData.cursor = index
+      this.getuserList(this.pageData)
+    },
+    getUserList(pageData) {
+      this.$api.getUserList(pageData).then(res => {
+        this.userData = res.data
+        this.dataCount = res.headers['x-slice-total-count']
+      })
     }
   },
   created () {
-    this.handleListApproveUser()
+    this.getUserList(this.pageData)
   }
 }
 </script>

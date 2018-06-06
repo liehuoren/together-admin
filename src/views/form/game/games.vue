@@ -16,17 +16,6 @@
 </template>
 
 <script>
-let testData = {
-  'games': [
-    {
-      id: '1',
-      name: '绝地求生',
-      hot: true,
-      deleted: true,
-      createTime: '2017-12-13 12:03:20'
-    }
-  ]
-}
 export default {
   name: 'games',
   data () {
@@ -164,10 +153,16 @@ export default {
       var _start = (index - 1) * this.pageSize
       var _end = index * this.pageSize
       this.gameData = this.ajaxGameData.slice(_start, _end)
+    },
+    getGameTypeList() {
+      this.$api.getGameTypeList().then(res => {
+        this.gameData = res.data
+        this.dataCount = res.data.length
+      })
     }
   },
   created () {
-    this.handleListApproveBanner()
+    this.getGameTypeList()
   }
 }
 </script>

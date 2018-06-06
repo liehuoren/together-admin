@@ -9,7 +9,7 @@
         "browser": true,
         "node": true
     },
-    "plugins": [ "html", "standard" ],
+    "plugins": [ "html", "standard", "vue" ],
     "rules": {
         "indent": [0, 2, { "SwitchCase": 1 }],
         "quotes": ["error", "single"],
@@ -19,6 +19,12 @@
         "no-eq-null": 2,
         "no-new": 0,
         "no-fallthrough": 0,
-        "no-unreachable": 0
+        "no-unreachable": 0,
+        "camelcase": [0,{"properties": "never"}],
+        "one-var": 0
+    },
+    "globals": {
+        "BASE_URL": true,
+        "CLIENT_ID": true
     }
 }

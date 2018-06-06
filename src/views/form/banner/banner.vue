@@ -9,8 +9,7 @@
             <Table border :columns="banners" :data="bannerData"></Table>
         </div>
         <div class="common-page">
-            <Page :total="dataCount" :page-size="pageSize"  show-total  @on-change="changePage"></Page>
-
+            <!-- <Page :total="dataCount" :page-size="pageSize"  show-total  @on-change="changePage"></Page> -->
         </div>
     </div>
 </template>
@@ -18,90 +17,7 @@
 <script>
 let testData = {
   'comments': [
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    },
-    {
-      id: '1',
-      articleId: '1',
-      title: '烈火人',
-      advertUrl: 'http://www/baidu.com',
-      createTime: '2017-12-13 12:03:20'
-    }
+    
   ]
 }
 export default {
@@ -226,16 +142,10 @@ export default {
     remove (index) {
       this.bannerData.splice(index, 1)
     },
-    handleListApproveBanner () {
-      // 保存取到的所有数据
-      this.ajaxBannerData = testData.comments
-      this.dataCount = testData.comments.length
-      // 初始化显示，小于每页显示条数，全显，大于每页显示条数，取前每页条数显示
-      if (testData.comments.length < this.pageSize) {
-        this.bannerData = this.ajaxBannerData
-      } else {
-        this.bannerData = this.ajaxBannerData.slice(0, this.pageSize)
-      }
+    getBannerList() {
+      this.$api.getBannerList().then(res => {
+        this.bannerData = res.data
+      })
     },
     changePage (index) {
       var _start = (index - 1) * this.pageSize
@@ -244,7 +154,7 @@ export default {
     }
   },
   created () {
-    this.handleListApproveBanner()
+    this.getBannerList()
   }
 }
 </script>
