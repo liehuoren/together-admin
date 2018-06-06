@@ -15,11 +15,6 @@
 </template>
 
 <script>
-let testData = {
-  'comments': [
-    
-  ]
-}
 export default {
   name: 'banner',
   data () {
@@ -31,13 +26,13 @@ export default {
       pageSize: 10,
       banners: [
         {
-          title: '广告标识',
+          title: '广告ID',
           key: 'id',
           width: 90,
           align: 'center'
         },
         {
-          title: '文章标识',
+          title: '文章ID',
           key: 'articleId',
           width: 90,
           align: 'center'
@@ -64,20 +59,6 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)
-                  }
-                }
-              }, '详细'),
               h('Button', {
                 props: {
                   type: 'error',
@@ -114,18 +95,7 @@ export default {
     handleAddBanner () {
       localStorage.actionType = 'add'
       this.$router.push({
-        name: 'bannerAdd'
-      })
-    },
-    show (index) {
-      localStorage.actionType = 'view'
-      localStorage.bannerId = this.bannerData[index].id
-      localStorage.bannerArticle = this.bannerData[index].articleId
-      localStorage.bannerTitle = this.bannerData[index].title
-      localStorage.bannerUrl = this.bannerData[index].advertUrl
-      localStorage.bannerTime = this.bannerData[index].createTime
-      this.$router.push({
-        name: 'bannerView'
+        name: 'banner-add'
       })
     },
     edit (index) {
@@ -136,7 +106,7 @@ export default {
       localStorage.bannerUrl = this.bannerData[index].advertUrl
       localStorage.bannerTime = this.bannerData[index].createTime
       this.$router.push({
-        name: 'bannerEdit'
+        name: 'banner-edit'
       })
     },
     remove (index) {

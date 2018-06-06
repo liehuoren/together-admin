@@ -11,12 +11,12 @@
                     <Row>
                         <Col span="10">
                             <FormItem label="游戏名称" prop="name">
-                                <Input v-model="gameAction.name" :readonly="isView" icon="android-list"/>
+                                <Input v-model="gameAction.name" icon="android-list"/>
                             </FormItem>
                         </Col>
                         <Col span="10">
                             <FormItem label="是否热门" prop="hot">
-                                <Select v-model="gameAction.hot" :disabled="isView">
+                                <Select v-model="gameAction.hot">
                                     <Option value="true">是</Option>
                                     <Option value="false">否</Option>
                                 </Select>
@@ -24,7 +24,7 @@
                         </Col>
                         <Col span="10">
                             <FormItem label="是否停用" prop="deleted">
-                                <Select v-model="gameAction.deleted" :disabled="isView">
+                                <Select v-model="gameAction.deleted">
                                     <Option value="true">是</Option>
                                     <Option value="false">否</Option>
                                 </Select>
@@ -32,8 +32,8 @@
                         </Col>
                     </Row>
                     <Row>
-                        <Col class="feedback-form-btn">
-                            <span><Button v-show="!isView" type="primary" class="common-button" @click="handleSaveBanner('gameAction')" icon="folder">保存</Button></span>
+                        <Col class="game-form-btn">
+                            <span><Button type="primary" class="common-button" @click="handleSaveBanner('gameAction')" icon="folder">保存</Button></span>
                         </Col>
                     </Row>
                 </Form>
@@ -49,11 +49,15 @@ export default {
       gameAction: {
         id: '',
         name: '',
-        hot: true,
-        deleted: false,
+        hot: 'true',
+        deleted: 'false',
         createTime: ''
       },
-      isView: false
+      ruleValidate: {
+        name: [
+          { required: true, message: '游戏名称不能为空', trigger: 'blur' }
+        ]
+      },
     }
   },
   methods: {
@@ -68,14 +72,9 @@ export default {
     if (localStorage.actionType != 'add') {
       this.gameAction.id = localStorage.gameId
       this.gameAction.name = localStorage.gameName
-      this.gameAction.hot = localStorage.gameHot
-      this.gameAction.deleted = localStorage.gameDeleted
+      this.gameAction.hot = localStorage.gameHot+''
+      this.gameAction.deleted = localStorage.gameDeleted+''
       this.gameAction.createTime = localStorage.gameTime
-    }
-  },
-  created () {
-    if (localStorage.actionType == 'view') {
-      this.isView = true
     }
   }
 }

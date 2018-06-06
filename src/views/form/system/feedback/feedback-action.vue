@@ -28,7 +28,7 @@
                         </Col>
                         <Col span="10">
                             <FormItem label="处理状态">
-                                <Select v-model="formFeedback.finished" :disabled="isView">
+                                <Select v-model="formFeedback.finished">
                                     <Option value="true">已处理</Option>
                                     <Option value="false">未处理</Option>
                                 </Select>
@@ -37,7 +37,7 @@
                     </Row>
                     <Row>
                         <Col class="feedback-form-btn">
-                            <span><Button v-show="!isView" type="primary" class="common-button" @click="handleSaveFeedback()" icon="folder">保存</Button></span>
+                            <span><Button type="primary" class="common-button" @click="handleSaveFeedback('formFeedback')" icon="folder">保存</Button></span>
                         </Col>
                     </Row>
                 </Form>
@@ -57,16 +57,18 @@ export default {
         content: '',
         createTime: '',
         finished: false
-      },
-      isView: false
+      }
     }
   },
   methods: {
     handleSaveFeedback () {
-      this.$Message.success('Success!')
-      this.$router.push({
-        name: 'feedback'
-      })
+        // this.$api.updateAbout(this.formAbout).then(res => {
+        //     this.$Message.success('Success!')
+                
+        // })
+        this.$router.push({
+            name: 'feedback'
+        })
     }
   },
   mounted () {
@@ -76,11 +78,6 @@ export default {
       this.formFeedback.email = localStorage.feedbackEmail
       this.formFeedback.content = localStorage.feedbackContent
       this.formFeedback.finished = localStorage.feedbackFinished
-    }
-  },
-  created () {
-    if (localStorage.actionType == 'view') {
-      this.isView = true
     }
   }
 }

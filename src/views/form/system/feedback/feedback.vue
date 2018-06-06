@@ -26,13 +26,13 @@ export default {
       pageSize: 100,
       feedbacks: [
         {
-          title: '意见标识',
+          title: '意见ID',
           key: 'id',
           width: 90,
           align: 'center'
         },
         {
-          title: '用户标识',
+          title: '用户ID',
           key: 'userId',
           width: 90,
           align: 'center'
@@ -55,7 +55,15 @@ export default {
         {
           title: '是否处理',
           key: 'finished',
-          align: 'center'
+          align: 'center',
+          render: (h,params)=>{
+            let text=''
+            if(params.finished == 'true'){text = '已处理'}
+            else{text = '未处理'}
+            return h('span',{
+              props:{}
+              },text)
+            }
         },
         {
           title: '操作',
@@ -64,20 +72,6 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)
-                  }
-                }
-              }, '详情'),
               h('Button', {
                 props: {
                   type: 'error',
@@ -100,17 +94,6 @@ export default {
     }
   },
   methods: {
-    show (index) {
-      localStorage.actionType = 'view'
-      localStorage.feedbackId = this.feedbackData[index].id
-      localStorage.feedbackUser = this.feedbackData[index].userId
-      localStorage.feedbackEmail = this.feedbackData[index].email
-      localStorage.feedbackContent = this.feedbackData[index].content
-      localStorage.feedbackFinished = this.feedbackData[index].finished
-      this.$router.push({
-        name: 'feedbackView'
-      })
-    },
     edit (index) {
       localStorage.actionType = 'update'
       localStorage.feedbackId = this.feedbackData[index].id
@@ -119,7 +102,7 @@ export default {
       localStorage.feedbackContent = this.feedbackData[index].content
       localStorage.feedbackFinished = this.feedbackData[index].finished
       this.$router.push({
-        name: 'feedbackEdit'
+        name: 'feedback-edit'
       })
     },
     handleListApproveBanner () {
@@ -139,7 +122,7 @@ export default {
       this.feedbackData = this.ajaxFeedbackData.slice(_start, _end)
     },
     getFeedbackList() {
-      this.$api.getFeedbackList().then(res => {
+      this.$api.getFeedBackList().then(res => {
         this.feedbackData = res.data
         this.dataCount = res.data.length
       })

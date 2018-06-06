@@ -120,13 +120,13 @@ export default {
             var id = localStorage.articleId
             this.$api.updateArticle(id, this.article).then(res => {
                 this.$router.push({
-                  name: 'article-list'
+                  name: 'articles'
                 })
             })
         }
         this.$api.createArticle(this.article).then(res => {
             this.$router.push({
-              name: 'article-list'
+              name: 'articles'
             })
         })
         

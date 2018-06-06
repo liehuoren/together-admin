@@ -13,11 +13,6 @@
     </div>
 </template>
 <script>
-let testData = {
-  'articles': [
-         
-  ]
-}
 export default {
   data () {
     return {
@@ -28,7 +23,7 @@ export default {
       pageSize: 10,
       articles: [
         {
-          title: '文章标识',
+          title: '文章ID',
           key: 'id',
           width: 90,
           align: 'center'
@@ -66,24 +61,10 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 180,
+          width: 140,
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)
-                  }
-                }
-              }, '详细'),
               h('Button', {
                 props: {
                   type: 'error',
@@ -125,43 +106,24 @@ export default {
       this.$api.getArticleList(pageData).then(res => {
         console.log(res)
         this.articleData = res.data
-        this.dataCount = res.headers['x-slice-total-count']
+        this.dataCount =  parseInt(res.headers['x-slice-total-count'])
       })
     },
     handleAddArticle () {
       localStorage.actionType = 'add'
       this.$router.push({
-        name: 'articleAdd'
-      })
-    },
-    show (index) {
-      localStorage.actionType = 'view'
-      localStorage.articleId = this.articleData[index].id
-      this.$router.push({
-        name: 'articleView'
+        name: 'article-add'
       })
     },
     edit (index) {
       localStorage.actionType = 'update'
       localStorage.articleId = this.articleData[index].id
       this.$router.push({
-        name: 'articleEdit'
+        name: 'article-edit'
       })
     },
     remove (index) {
       this.articleData.splice(index, 1)
-    },
-    // 获取文章信息
-    handleListApproveArticle () {
-      // 保存取到的所有数据
-      this.ajaxArticleData = testData.articles
-      this.dataCount = testData.articles.length
-      // 初始化显示，小于每页显示条数，全显，大于每页显示条数，取前每页条数显示
-      if (testData.articles.length < this.pageSize) {
-        this.articleData = this.ajaxArticleData
-      } else {
-        this.articleData = this.ajaxArticleData.slice(0, this.pageSize)
-      }
     },
     changePage (index) {
       this.pageData.cursor = index
@@ -170,7 +132,6 @@ export default {
   },
   created () {
     this.getArticles(this.pageData)
-    this.handleListApproveArticle()
   }
 }
 </script>

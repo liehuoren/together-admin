@@ -40,7 +40,7 @@ export const page500 = {
 export const preview = {
     path: '/preview',
     name: 'preview',
-    component: () => import('@/views/form/article-publish/preview.vue')
+    component: () => import('@/views/form/article/preview.vue')
 };
 
 export const locking = {
@@ -62,25 +62,18 @@ export const otherRouter = {
         { path: 'shopping', title: '购物详情', name: 'shopping', component: () => import('@/views/advanced-router/component/shopping-info.vue') }, // 用于展示带参路由
         { path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue') },
 
-        { path: 'articleView', title: '文章详情', name: 'articleView', component: () => import('@/views/form/article-publish/article-detail.vue') },
-        { path: 'articleAdd', title: '文章新增', name: 'articleAdd', component: () => import('@/views/form/article-publish/article-publish.vue') },
-        { path: 'articleEdit', title: '文章编辑', name: 'articleEdit', component: () => import('@/views/form/article-publish/article-publish.vue') },
+        { path: 'article-add', title: '文章新增', name: 'article-add', component: () => import('@/views/form/article/article-publish.vue') },
+        { path: 'article-edit', title: '文章编辑', name: 'article-edit', component: () => import('@/views/form/article/article-publish.vue') },
 
-        { path: 'bannerView', title: '广告详情', name: 'bannerView', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
-        { path: 'bannerAdd', title: '广告新增', name: 'bannerAdd', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
-        { path: 'bannerEdit', title: '广告编辑', name: 'bannerEdit', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
+        { path: 'banner-add', title: '广告新增', name: 'banner-add', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
+        { path: 'banner-edit', title: '广告编辑', name: 'banner-edit', component: () => import('@/views/my-components/image-editor/image-editor.vue') },
 
-        { path: 'commentView', title: '评论回复', name: 'commentView', component: () => import('@/views/form/comment/comment-action.vue') },
-        { path: 'commentEdit', title: '评论编辑', name: 'commentEdit', component: () => import('@/views/form/comment/comment-action.vue') },
+        { path: 'comment-edit', title: '评论编辑', name: 'comment-edit', component: () => import('@/views/form/comment/comment-action.vue') },
 
-        { path: 'feedbackView', title: '反馈详情', name: 'feedbackView', component: () => import('@/views/form/system/feedback/feedback-action.vue') },
-        { path: 'feedbackEdit', title: '反馈处理', name: 'feedbackEdit', component: () => import('@/views/form/system/feedback/feedback-action.vue') },
+        { path: 'feedback-edit', title: '反馈处理', name: 'feedback-edit', component: () => import('@/views/form/system/feedback/feedback-action.vue') },
 
-        { path: 'gamesView', title: '游戏详情', name: 'gamesView', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
-        { path: 'gamesAdd', title: '游戏新增', name: 'gamesAdd', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
-        { path: 'gamesEdit', title: '游戏编辑', name: 'gamesEdit', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
-
-        { path: 'usersAction', title: '用户详情', name: 'usersAction', icon: 'compose', component: () => import('@/views/form/user/users-action.vue') }
+        { path: 'games-add', title: '游戏新增', name: 'games-add', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
+        { path: 'games-edit', title: '游戏编辑', name: 'games-edit', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
     ]
 };
 
@@ -93,7 +86,7 @@ export const appRouter = [
         title: '信息资讯',
         component: Main,
         children: [
-            { path: 'article-list', title: '文章管理', name: 'article-list', icon: 'compose', component: () => import('@/views/form/article-publish/article-list.vue') },
+            { path: 'articles', title: '文章管理', name: 'articles', icon: 'compose', component: () => import('@/views/form/article/articles.vue') },
             { path: 'banner', title: 'Banner管理', name: 'banner', icon: 'compose', component: () => import('@/views/form/banner/banner.vue') },
             { path: 'comment', title: '评论管理', name: 'comment', icon: 'compose', component: () => import('@/views/form/comment/comment.vue') }
         ]
@@ -112,7 +105,7 @@ export const appRouter = [
     {
         path: '/game',
         icon: 'android-checkbox',
-        name: 'system',
+        name: 'game',
         title: '游戏管理',
         component: Main,
         children: [

@@ -27,7 +27,7 @@ export default {
       pageSize: 10,
       games: [
         {
-          title: '游戏标识',
+          title: '游戏ID',
           key: 'id',
           width: 90,
           align: 'center'
@@ -41,12 +41,28 @@ export default {
         {
           title: '是否热门',
           key: 'hot',
-          align: 'center'
+          align: 'center',
+          render: (h,params)=>{
+            let text=''
+            if(params.hot){text = '热门'}
+            else{text = '不热门'}
+            return h('span',{
+              props:{}
+              },text)
+          }
         },
         {
           title: '是否停用',
           key: 'deleted',
-          align: 'center'
+          align: 'center',
+          render: (h,params)=>{
+            let text=''
+            if(params.deleted){text = '停用'}
+            else{text = '未停用'}
+            return h('span',{
+              props:{}
+              },text)
+          }
         },
         {
           title: '创建时间',
@@ -60,20 +76,6 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)
-                  }
-                }
-              }, '详情'),
               h('Button', {
                 props: {
                   type: 'error',
@@ -113,17 +115,6 @@ export default {
         name: 'gamesAdd'
       })
     },
-    show (index) {
-      localStorage.actionType = 'view'
-      localStorage.gameId = this.gameData[index].id
-      localStorage.gameName = this.gameData[index].name
-      localStorage.gameHot = this.gameData[index].hot
-      localStorage.gameDeleted = this.gameData[index].deleted
-      localStorage.gameTime = this.gameData[index].createTime
-      this.$router.push({
-        name: 'gamesView'
-      })
-    },
     edit (index) {
       localStorage.actionType = 'update'
       localStorage.gameId = this.gameData[index].id
@@ -132,22 +123,11 @@ export default {
       localStorage.gameDeleted = this.gameData[index].deleted
       localStorage.gameTime = this.gameData[index].createTime
       this.$router.push({
-        name: 'gamesEdit'
+        name: 'games-edit'
       })
     },
     remove (index) {
       this.gameData.splice(index, 1)
-    },
-    handleListApproveBanner () {
-      // 保存取到的所有数据
-      this.ajaxGameData = testData.games
-      this.dataCount = testData.games.length
-      // 初始化显示，小于每页显示条数，全显，大于每页显示条数，取前每页条数显示
-      if (testData.games.length < this.pageSize) {
-        this.gameData = this.ajaxGameData
-      } else {
-        this.gameData = this.ajaxGameData.slice(0, this.pageSize)
-      }
     },
     changePage (index) {
       var _start = (index - 1) * this.pageSize

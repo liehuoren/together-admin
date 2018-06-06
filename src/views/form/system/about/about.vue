@@ -52,7 +52,6 @@
                     <Row>
                         <Col class="about-form-btn">
                             <span><Button type="primary" class="common-button" @click="handleSaveBanner('formAbout')" icon="folder">保存</Button></span>
-                            <!--<Button type="ghost" class="common-button" @click="handleReset('formAbout')">重置</Button>-->
                         </Col>
                     </Row>
                 </Form>
@@ -117,11 +116,6 @@ export default {
     this.$api.getAbout().then(res => {
       this.formAbout = res.data
     })
-    if (localStorage.bannerType != 'add') {
-      // document.getElementById('cropImg').src=localStorage.bannerUrl;
-      // this.formAbout.company = localStorage.aboutCompany;
-      // this.formAbout.introduction = localStorage.aboutIntroduction;
-    }
     let img = document.getElementById('cropImg')
     this.cropper = new Cropper(img, {
       dragMode: 'move',

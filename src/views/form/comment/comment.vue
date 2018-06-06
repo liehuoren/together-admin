@@ -15,7 +15,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'comment',
   data () {
@@ -27,34 +26,56 @@ export default {
       pageSize: 10,
       comments: [
         {
-          title: '评论标识',
+          title: '评论ID',
           key: 'id',
           width: 90,
           align: 'center'
         },
         {
-          title: '文章标识',
+          title: '文章ID',
           key: 'articleId',
           width: 90,
           align: 'center'
         },
         {
-          title: '用户标识',
-          key: 'userId',
+          title: '用户ID',
+          key: 'user',
           width: 90,
-          align: 'center'
+          align: 'center',
+          render: (h,params)=>{ 
+            let user = params.row.user
+            return h('span',{
+              props:{}
+              },user.nickname)
+          }
         },
         {
           title: '是否已审核',
           key: 'audit',
           width: 100,
-          align: 'center'
+          align: 'center',
+          render: (h,params)=>{
+            let text=''
+            if(params.audit){text = '已审核'}
+            else{text = '未审核'}
+            return h('span',{
+              props:{}
+              },text)
+          }
         },
         {
           title: '是否置顶',
           key: 'toTop',
           width: 90,
-          align: 'center'
+          align: 'center',
+          render: (h,params)=>{
+            let text=''
+            if(params.toTop){text = '置顶'}
+            else{text = '不置顶'}
+            return h('span',{
+              props:{}
+              },text)
+          }
         },
         {
           title: '评论内容',
@@ -87,20 +108,6 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)
-                  }
-                }
-              }, '详细'),
               h('Button', {
                 props: {
                   type: 'error',
@@ -138,32 +145,17 @@ export default {
     }
   },
   methods: {
-    show (index) {
-      localStorage.actionType = 'view'
-      localStorage.commentId = this.commentData[index].id
-      localStorage.commentAudit = this.commentData[index].audit
-      localStorage.commentToTop = this.commentData[index].toTop
-      localStorage.commentUser = this.commentData[index].userId
-      localStorage.commentArticle = this.commentData[index].articleId
-      localStorage.commentContent = this.commentData[index].content
-      localStorage.commentTime = this.commentData[index].createTime
-      localStorage.commentReply = this.commentData[index].replyContent
-      this.$router.push({
-        name: 'commentView'
-      })
-    },
     edit (index) {
-      localStorage.actionType = 'update'
       localStorage.commentId = this.commentData[index].id
       localStorage.commentAudit = this.commentData[index].audit
       localStorage.commentToTop = this.commentData[index].toTop
-      localStorage.commentUser = this.commentData[index].userId
+      localStorage.commentUser = this.commentData[index].user.nickName
       localStorage.commentArticle = this.commentData[index].articleId
       localStorage.commentContent = this.commentData[index].content
       localStorage.commentTime = this.commentData[index].createTime
       localStorage.commentReply = this.commentData[index].replyContent
       this.$router.push({
-        name: 'commentEdit'
+        name: 'comment-edit'
       })
     },
     remove (index) {
@@ -173,7 +165,7 @@ export default {
       this.$api.getDiscussList(pageData).then(res => {
         console.log(res)
         this.commentData = res.data
-        this.dataCount = res.headers['x-slice-total-count']
+        this.dataCount = parseInt(res.headers['x-slice-total-count'])
       })
     },
     changePage (index) {

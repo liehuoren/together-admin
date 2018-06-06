@@ -27,7 +27,7 @@ export default {
       pageSize: 10,
       users: [
         {
-          title: '用户标识',
+          title: '用户ID',
           key: 'id',
           width: 90,
           align: 'center'
@@ -41,45 +41,38 @@ export default {
         {
           title: '性别',
           key: 'gender',
-          align: 'center'
+          align: 'center',
+          render: (h,params)=>{
+            let text=''
+            if(params.gender == 1){text = '男'}
+            else{text = '女'}
+            return h('div',{
+              props:{}
+              },text)
+            }
         },
         {
-          title: '头像链接',
+          title: '头像',
           key: 'avatarUrl',
-          align: 'center'
-        },
-        {
-          title: '注册时间',
-          key: 'createTime',
-          align: 'center'
-        },
-        {
-          title: '最近登录时间',
-          key: 'lastLoginTime',
-          align: 'center'
-        },
-        {
-          title: '操作',
-          key: 'action',
-          width: 80,
           align: 'center',
           render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)
-                  }
-                }
-              }, '详情')
-            ])
+            return h('span', {
+              attrs: {
+                style: 'width: 40px;height: 40px;'
+              },
+            }, [
+                h('img', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  attrs: {
+                    src: params.row.avatarUrl, style: 'width: 40px;height: 40px;border-radius: 2px;'
+                  },
+                  style: {
+                  },
+                }),
+              ]);
           }
         }
       ],
@@ -91,19 +84,6 @@ export default {
     }
   },
   methods: {
-    show (index) {
-      localStorage.actionType = 'view'
-      localStorage.userId = this.userData[index].id
-      localStorage.userNick = this.userData[index].nickName
-      localStorage.userPhone = this.userData[index].phone
-      localStorage.userGender = this.userData[index].gender
-      localStorage.userAvatar = this.userData[index].avatarUrl
-      localStorage.userTime = this.userData[index].createTime
-      localStorage.userLast = this.userData[index].lastLoginTime
-      this.$router.push({
-        name: 'usersAction'
-      })
-    },
     changePage (index) {
       this.pageData.cursor = index
       this.getuserList(this.pageData)
@@ -111,7 +91,7 @@ export default {
     getUserList(pageData) {
       this.$api.getUserList(pageData).then(res => {
         this.userData = res.data
-        this.dataCount = res.headers['x-slice-total-count']
+        this.dataCount = parseInt(res.headers['x-slice-total-count'])
       })
     }
   },
