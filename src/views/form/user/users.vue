@@ -35,16 +35,17 @@ export default {
         {
           title: '用户昵称',
           key: 'nickName',
-          width: 90,
+          width: 120,
           align: 'center'
         },
         {
           title: '性别',
           key: 'gender',
+          width: 90,
           align: 'center',
           render: (h,params)=>{
             let text=''
-            if(params.gender == 1){text = '男'}
+            if(params.row.gender == 1){text = '男'}
             else{text = '女'}
             return h('div',{
               props:{}
