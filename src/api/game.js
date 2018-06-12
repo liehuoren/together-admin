@@ -78,8 +78,8 @@ const game = {
         return Promise.reject(e)
       })
   },
-  createGameConfig(data){
-    var url = '/games/game-configs/?gameType='+data.gameType+'&inputType='+data.inputType+'&label='+data.label+'&required='+data.required
+  createGameConfig(gameTypeId,data){
+    var url = '/games/game-configs/?gameTypeId='+gameTypeId+'&inputType='+data.inputType+'&label='+data.label+'&required='+data.required
     return axios.post(url).then(res => {
       return res
     })

@@ -6,7 +6,7 @@
 <template>
     <div class="feedback">
         <div class="common-div">
-            <Card>
+            <Card v-show="!addOption">
                 <Form ref="gameConfig" :model="gameConfig" :rules="ruleValidate" :label-width="80" >
                     <Row>
                         <Col>
@@ -35,14 +35,11 @@
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row v-show="updateOption">
                         <Col>
                             <FormItem label="配置选项" prop="options">
                                 <Tag v-for="item in gameConfig.options" :key="item.id" :name="item.id" closable @on-close="handleOptionClose">{{ item.value }}</Tag>
                                 <Button icon="ios-plus-empty" type="dashed" size="small" @click="handleOptionAdd">添加配置选项</Button>
-                                   <!--  <Checkbox v-for="item in gameConfig.options" :label="item.id" >{{item.value}}</Checkbox> -->
-                                <!-- <CheckboxGroup v-model="gameConfig.options">
-                                </CheckboxGroup> -->
                             </FormItem>
                         </Col>
                     </Row>
@@ -53,6 +50,20 @@
                     </Row>
                 </Form>
             </Card>
+            <Card v-show="addOption">
+                <Row>
+                    <Col>
+                        <span class="opt-label">配置选项</span>
+                        <Tag v-for="item in gameConfig.options" :key="item.id" :name="item.id" closable @on-close="handleOptionClose">{{ item.value }}</Tag>
+                        <Button icon="ios-plus-empty" type="dashed" size="small" @click="handleOptionAdd">添加配置选项</Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col class="game-form-btn">
+                        <span><Button type="primary" class="common-button" @click="handleReturn()" icon="folder">确定</Button></span>
+                    </Col>
+                </Row>
+            </Card>
         </div>
     </div>
 </template>
@@ -61,6 +72,8 @@ export default {
   name: 'gameConfig',
   data () {
     return {
+        updateOption:true,
+        addOption:false,
         optionName:'',
         gameConfig:{
             id:'',
@@ -123,16 +136,12 @@ export default {
                     this.$Message.error('请输入配置选项名称')
                     return
                 }
-                if(localStorage.actionType != 'add'){
-                    this.$api.createConfigOption(this.gameConfig.id,this.optionName).then(
-                        res =>{
-                            this.gameConfig.options.push(res.data);
-                        }
-                    );
-                }else{
-                    let optin ={"id":this.gameConfig.options.length+1,"value":this.optionName}
-                    this.gameConfig.options.push(optin);
-                }
+                this.$api.createConfigOption(this.gameConfig.id,this.optionName).then(
+                    res =>{
+                        this.gameConfig.options.push(res.data)
+                        this.$Message.success('添加配置选项成功!')
+                    }
+                );
             }
         })
     },
@@ -142,11 +151,15 @@ export default {
             this.gameConfig.options.splice(index, 1);
         });
     },
+    handleReturn(){
+        this.$router.push({
+            name: 'games'
+        })
+    },
     handleSaveGame (gameConfig) {
         this.$refs[gameConfig].validate((valid) => {
         if (valid) {
-            console.log("actionType:"+localStorage.actionType)
-            if (localStorage.actionType != "add") {
+            if (this.updateOption) {
                   this.$api.updateGameConfig(this.gameConfig.id, this.gameConfig).then(res => {
                       this.$store.commit('removeTag', this.$route.name);
                       this.$router.push({
@@ -154,16 +167,10 @@ export default {
                       })
                   })
               }else{
-                this.$api.createGameConfig(this.gameConfig).then(res => {
-                    // let gameConfigId = res.data.id
-                    // this.$api.createConfigOption(gameConfigId,this.gameConfig.options).then(
-                    //     res =>{
-                    //         this.$store.commit('removeTag', this.$route.name);
-                            this.$router.push({
-                              name: 'games'
-                            })
-                        // }
-                    // );
+                this.$api.createGameConfig(this.$route.params.gameId,this.gameConfig).then(res => {
+                    this.gameConfig = res.data
+                    this.addOption = true
+                    this.$Message.success('保存游戏配置成功!')
                 })
               }
         } else {
@@ -173,17 +180,16 @@ export default {
     },
     getGamesConfig(gameId){
         this.$api.getGamesConfig(gameId).then(res=>{
-            console.log(res.data)
+            console.log("getGamesConfig-res.data:"+res.data)
             this.gameAction = res.data
-            this.gameConfig = this.gameAction.gameConfig
-            if(this.gameConfig.id == null){
-                localStorage.actionType = 'add'
+            if(this.gameAction.gameConfig == null){
+                this.updateOption = false
             }else{
-                localStorage.actionType = 'update'
+                this.gameConfig = this.gameAction.gameConfig
+                this.updateOption = true
                 this.gameConfig.required = this.gameConfig.required+''
             }
-            // this.options = this.gameConfig.options
-            console.log(this.gameConfig)
+            console.log("gameConfig:"+this.gameConfig)
         })
     }
   },
