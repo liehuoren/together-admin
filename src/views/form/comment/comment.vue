@@ -38,7 +38,7 @@ export default {
           align: 'center'
         },
         {
-          title: '用户ID',
+          title: '用户昵称',
           key: 'user',
           width: 90,
           align: 'center',
@@ -117,9 +117,13 @@ export default {
                   marginRight: '5px'
                 },
                 on: {
-                  click: () => {
-                    this.edit(params.index)
-                  }
+                    click: () => {
+                        let argu = { commentId: params.row.id };
+                        this.$router.push({
+                            name: 'comment-edit',
+                            params: argu
+                        });
+                    }
                 }
               }, '回复'),
               h('Button', {
@@ -145,20 +149,21 @@ export default {
     }
   },
   methods: {
-    edit (index) {
-      localStorage.commentId = this.commentData[index].id
-      localStorage.commentAudit = this.commentData[index].audit
-      localStorage.commentToTop = this.commentData[index].toTop
-      localStorage.commentUser = this.commentData[index].user.nickName
-      localStorage.commentArticle = this.commentData[index].articleId
-      localStorage.commentContent = this.commentData[index].content
-      localStorage.commentTime = this.commentData[index].createTime
-      localStorage.commentReply = this.commentData[index].replyContent
-      this.$router.push({
-        name: 'comment-edit'
-      })
-    },
+    // edit (index) {
+    //   localStorage.commentId = this.commentData[index].id
+    //   // localStorage.commentAudit = this.commentData[index].audit
+    //   // localStorage.commentToTop = this.commentData[index].toTop
+    //   // localStorage.commentUser = this.commentData[index].user.nickname
+    //   // localStorage.commentArticle = this.commentData[index].articleId
+    //   // localStorage.commentContent = this.commentData[index].content
+    //   // localStorage.commentTime = this.commentData[index].createTime
+    //   // localStorage.commentReply = this.commentData[index].replyContent
+    //   this.$router.push({
+    //     name: 'comment-edit'
+    //   })
+    // },
     remove (index) {
+      this.$api.deleteDiscuss(this.commentData[index].id)
       this.commentData.splice(index, 1)
     },
     getDiscussList (pageData) {

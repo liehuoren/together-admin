@@ -35,12 +35,13 @@ export default {
         {
           title: '用户昵称',
           key: 'nickName',
-          width: 90,
+          width: 120,
           align: 'center'
         },
         {
           title: '性别',
           key: 'gender',
+          width: 90,
           align: 'center',
           render: (h,params)=>{
             let text=''

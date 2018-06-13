@@ -102,9 +102,8 @@ export default {
       this.$refs[formAbout].validate((valid) => {
         if (valid) {
             this.$api.updateAbout(this.formAbout).then(res => {
-                
+                this.$Message.success('Success!')
             })
-          this.$Message.success('Success!')
           // 保存广告
         } else {
           this.$Message.error('Fail!')
