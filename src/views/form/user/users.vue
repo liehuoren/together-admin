@@ -44,8 +44,14 @@ export default {
           align: 'center',
           render: (h,params)=>{
             let text=''
-            if(params.gender == 1){text = '男'}
-            else{text = '女'}
+
+            if(params.row.gender == '1'){
+              text = '男'
+            } else if(params.row.gender == '2'){
+              text = '女'
+            } else {
+              text = '未知'
+            }
             return h('div',{
               props:{}
               },text)
@@ -86,7 +92,7 @@ export default {
   methods: {
     changePage (index) {
       this.pageData.cursor = index
-      this.getuserList(this.pageData)
+      this.getUserList(this.pageData)
     },
     getUserList(pageData) {
       this.$api.getUserList(pageData).then(res => {
