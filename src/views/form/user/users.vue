@@ -81,7 +81,13 @@ export default {
                 }),
               ]);
           }
-        }
+        },
+        {
+          title: '信用分',
+          key: 'creditScore',
+          width: 120,
+          align: 'center'
+        },
       ],
       userData: [],
       pageData: {
