@@ -4,32 +4,70 @@
 </style>
 
 <template>
-    <div class="feedback">
+    <div>
         <div class="common-div">
             <Card>
                 <Form ref="gameAction" :model="gameAction" :rules="ruleValidate" :label-width="80" >
                     <Row>
-                        <Col span="10">
+                        <Col span="11">
                             <FormItem label="游戏名称" prop="name">
                                 <Input v-model="gameAction.name" icon="android-list"/>
                             </FormItem>
                         </Col>
-                        <Col span="10">
+                        <Col span="11">
                             <FormItem label="最大人数" prop="maxMember">
                                 <Input v-model="gameAction.maxMember" icon="android-list"/>
                             </FormItem>
                         </Col>
-                        <Col span="10">
+                        <Col span="11">
                             <FormItem label="logo图" prop="logo">
                                 <Input v-model="gameAction.logo" icon="android-list"/>
+                                <Upload
+                                    ref="upload"
+                                    :show-upload-list="false"
+                                    :on-success="handleLogoSuccess"
+                                    :on-error="handleError"
+                                    :on-exceeded-size="handleMaxSize"
+                                    :format="['jpg','jpeg','png']"
+                                    :max-size="4096"
+                                    multiple
+                                    type="drag"
+                                    name="file"                                   
+                                    action="//upload-z2.qiniu.com/"
+                                    :data="{token: uploadConfig.token}"
+                                    style="display: inline-block;width:58px;"
+                                    >
+                                    <div class="upload-icon">
+                                        <Icon type="ios-cloud-upload" size="30"></Icon>
+                                    </div>
+                                </Upload>
                             </FormItem>
                         </Col>
-                        <Col span="10">
+                        <Col span="11">
                             <FormItem label="游戏图片" prop="imgUrl">
                                 <Input v-model="gameAction.imgUrl" icon="android-list"/>
+                                <Upload
+                                    ref="upload"
+                                    :show-upload-list="false"
+                                    :on-success="handleImgSuccess"
+                                    :on-error="handleError"
+                                    :on-exceeded-size="handleMaxSize"
+                                    :format="['jpg','jpeg','png']"
+                                    :max-size="4096"
+                                    multiple
+                                    type="drag"
+                                    name="file"                                   
+                                    action="//upload-z2.qiniu.com/"
+                                    :data="{token: uploadConfig.token}"
+                                    style="display: inline-block;width:58px;"
+                                    >
+                                    <div class="upload-icon">
+                                        <Icon type="ios-cloud-upload" size="30"></Icon>
+                                    </div>
+                                </Upload>
                             </FormItem>
                         </Col>
-                        <Col span="10">
+                        <Col span="11">
                             <FormItem label="是否热门" prop="hot">
                                 <Select v-model="gameAction.hot">
                                     <Option value="true">是</Option>
@@ -37,7 +75,7 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                        <Col span="10">
+                        <Col span="11">
                             <FormItem label="是否停用" prop="deleted">
                                 <Select v-model="gameAction.deleted">
                                     <Option value="true">是</Option>
@@ -61,27 +99,31 @@ export default {
   name: 'gameAction',
   data () {
     return {
-      gameAction: {
-        id: '',
-        name: '',
-        hot: 'true',
-        deleted: 'false',
-        maxMember: 0,
-        logo: '',
-        imgUrl: '',
-        createTime: ''
-      },
-      ruleValidate: {
-        name: [{ required: true, message: '游戏名称不能为空', trigger: 'blur' }],
-        maxMember:[{ required: true, message: '最大匹配人数不能为空', trigger: 'blur' },
-                    { type: 'number', message: '请输入数字格式', trigger: 'blur', transform(value) {
-                        return Number(value);
-                    }}
-                ],
-        logo:[{ required: true, message: 'logo图链接不能为空', trigger: 'blur' }],
-        imgUrl:[{ required: true, message: '图片链接不能为空', trigger: 'blur' }]
+        uploadConfig:{
+            token:'',
+            baseUrl:'',
+        },
+        gameAction: {
+            id: '',
+            name: '',
+            hot: 'true',
+            deleted: 'false',
+            maxMember: 0,
+            logo: '',
+            imgUrl: '',
+            createTime: ''
+        },
+        ruleValidate: {
+            name: [{ required: true, message: '游戏名称不能为空', trigger: 'blur' }],
+            maxMember:[{ required: true, message: '最大匹配人数不能为空', trigger: 'blur' },
+                        { type: 'number', message: '请输入数字格式', trigger: 'blur', transform(value) {
+                            return Number(value);
+                        }}
+                    ],
+            logo:[{ required: true, message: 'logo图链接不能为空', trigger: 'blur' }],
+            imgUrl:[{ required: true, message: '图片链接不能为空', trigger: 'blur' }]
 
-      },
+        }
     }
   },
   methods: {
@@ -109,7 +151,22 @@ export default {
           this.$Message.error('Fail!')
         }
       })
-    }
+    },
+    handleLogoSuccess(res){
+        console.log(res)
+        this.gameAction.logo = this.uploadConfig.baseUrl+res.key
+        this.$Message.success('上传logo图成功!')
+    },
+    handleImgSuccess(res){
+        console.log(res)
+        this.gameAction.imgUrl = this.uploadConfig.baseUrl+res.key
+        this.$Message.success('上传图成功!')
+    },
+    handleError(){this.$Message.success('上传图失败!')},
+    
+    handleMaxSize(){
+        this.$Message.warning( '文件太大，不能超过 4M');
+    },
   },
   mounted () {
     if (localStorage.actionType != 'add') {

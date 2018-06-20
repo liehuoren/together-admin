@@ -31,17 +31,18 @@
                                     :show-upload-list="false"
                                     :on-success="handleSuccess"
                                     :on-error="handleError"
+                                    :on-exceeded-size="handleMaxSize"
                                     :format="['jpg','jpeg','png']"
-                                    :max-size="2048"
+                                    :max-size="4096"
                                     multiple
                                     type="drag"
                                     name="file"                                   
                                     action="//upload-z2.qiniu.com/"
-                                    :data="{token: token}"
+                                    :data="{token: uploadConfig.token}"
                                     style="display: inline-block;width:58px;"
                                     >
-                                    <div style="width: 58px;height:58px;line-height: 58px;">
-                                        <Icon type="camera" size="20"></Icon>
+                                    <div class="upload-icon">
+                                        <Icon type="ios-cloud-upload" size="30"></Icon>
                                     </div>
                                 </Upload>
                             </FormItem>
@@ -81,7 +82,7 @@
                     </Row> -->
                     <Row>
                         <Col class="about-form-btn">
-                            <span><Button type="primary" class="common-button" @click="handleSaveBanner('formAbout')" icon="folder">保存</Button></span>
+                            <span><Button type="primary" class="common-button" @click="handleSaveAbout('formAbout')" icon="folder">保存</Button></span>
                         </Col>
                     </Row>
                 </Form>
@@ -96,7 +97,10 @@ export default {
   name: 'about',
   data () {
     return {
-        token:'Hx3hejEdZulPyRHggbtuJlcQG5UYk0xEV1rsdEDY:eRr2hO8eOYLFdoyhQRKMHMo6ZJo=:eyJzY29wZSI6InRvZ2V0aGVyIiwiZGVhZGxpbmUiOjE1MjkzOTM3MDZ9',
+        uploadConfig:{
+            token:'',
+            baseUrl:'',
+        },
         showPercent:'',
         formAbout: {
             id: '1',
@@ -116,48 +120,17 @@ export default {
     }
   },
   methods: {
-      handleSuccess(res){
+    handleSuccess(res){
         console.log(res)
-        this.formAbout.logo = 'http://p9mhxf2ng.bkt.clouddn.com/'+res.key
-        this.$Message.success('Success!')
-      },
-      handleError(){this.$Message.success('Fail!')},
-      handleChange (e) {
-        let file = e.target.files[0]
-        this.$api.inintUpload() .then(res =>{
-            let token = res.uptoken;
-            let config = {
-                useCdnDomain: true,
-                region: qiniu.region.z2
-            };
-            let putExtra = {
-                fname: "",
-                params: {},
-                mimeType: null
-            };
-            let key = file.name;
-            let subscription;
-            let next = (response) =>{
-                let total = response.total;
-                this.showPercent = "进度：" + total.percent + "% ";
-            }
-            // 调用sdk上传接口获得相应的observable，控制上传和暂停
-            let observable = qiniu.upload(file, key, token, putExtra, config);
-            observable.subscribe(next)
-        })
-    //   let reader = new FileReader()
-    //   reader.onload = () => {
-    //     this.cropper.replace(reader.result)
-    //     reader.onload = null
-    //   }
-    //   reader.readAsDataURL(file)
+        this.formAbout.logo = this.uploadConfig.baseUrl+res.key
+        this.$Message.success('上传logo图成功!')
     },
-    handleCrop () {
-        let file = this.cropper.getCroppedCanvas().toDataURL()
-        this.option.cropedImg = file
-        this.option.showCropedImage = true
+    handleError(){this.$Message.success('上传logo图失败!')},
+    
+    handleMaxSize(){
+        this.$Message.warning( '文件太大，不能超过 4M');
     },
-    handleSaveBanner (formAbout) {
+    handleSaveAbout (formAbout) {
         this.$refs[formAbout].validate((valid) => {
             if (valid) {
                 this.$api.updateAbout(this.formAbout).then(res => {
@@ -168,11 +141,26 @@ export default {
             }
         })
     }
+    // handleChange (e) {
+    //     let file = e.target.files[0]
+    //   let reader = new FileReader()
+    //   reader.onload = () => {
+    //     this.cropper.replace(reader.result)
+    //     reader.onload = null
+    //   }
+    //   reader.readAsDataURL(file)
+    // },
+    // handleCrop () {
+    //     let file = this.cropper.getCroppedCanvas().toDataURL()
+    //     this.option.cropedImg = file
+    //     this.option.showCropedImage = true
+    // },
   },
   mounted () {
     this.$api.getAbout().then(res => {
       this.formAbout = res.data
     })
+    this.uploadConfig = this.$api.getUploadToken()
     // let img = document.getElementById('cropImg')
     // this.cropper = new Cropper(img, {
     //   dragMode: 'move',

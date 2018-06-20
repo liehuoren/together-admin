@@ -17,7 +17,26 @@
                     <Input v-model="article.introduction"  icon="android-list"/>
                 </FormItem>
                 <FormItem label="文章头图" :error="articleError">
-                    <Input v-model="article.imgUrl" icon="android-list"/>
+                    <Input v-model="article.imgUrl" icon="android-list" readonly/>
+                    <Upload
+                        ref="upload"
+                        :show-upload-list="false"
+                        :on-success="handleSuccess"
+                        :on-error="handleError"
+                        :on-exceeded-size="handleMaxSize"
+                        :format="['jpg','jpeg','png']"
+                        :max-size="4096"
+                        multiple
+                        type="drag"
+                        name="file"                                   
+                        action="//upload-z2.qiniu.com/"
+                        :data="{token: uploadConfig.token}"
+                        style="display: inline-block;width:58px;"
+                        >
+                        <div class="upload-icon">
+                            <Icon type="ios-cloud-upload" size="30"></Icon>
+                        </div>
+                    </Upload>                    
                 </FormItem>
                
             </Form>
@@ -39,10 +58,14 @@ export default {
   name: 'artical-publish',
   data () {
     return {
+      uploadConfig:{
+        token:'',
+        baseUrl:'',
+      },
       article: {
         title: '',
         author: '', 
-        imgUrl: 'http://p6rwlbhj0.bkt.clouddn.com/image/together/3.jpg',
+        imgUrl: '',//http://p6rwlbhj0.bkt.clouddn.com/image/together/3.jpg
         introduction: '',
         content: ''
       },
@@ -134,7 +157,17 @@ export default {
           })
         }
       }
-    }
+    },
+    handleSuccess(res){
+      console.log(res)
+      this.article.imgUrl = this.uploadConfig.baseUrl+res.key
+      this.$Message.success('上传图成功!')
+    },
+    handleError(){this.$Message.success('上传图失败!')},
+    
+    handleMaxSize(){
+        this.$Message.warning( '文件太大，不能超过 4M');
+    },
   },
   computed: {
     completeUrl () {
@@ -173,6 +206,7 @@ export default {
             tinymce.activeEditor.setContent(this.article.content)
         })
     }
+    this.uploadConfig = this.$api.getUploadToken()
   },
   destroyed () {
     tinymce.get('articleEditor').destroy()

@@ -16,7 +16,26 @@
                         </Col>
                         <Col>
                             <FormItem label="广告图片" prop="advertUrl">
-                                <Input v-model="formBanner.advertUrl"  icon="android-list"/>
+                                <Input v-model="formBanner.advertUrl"  icon="android-list" readonly/>
+                                <Upload
+                                    ref="upload"
+                                    :show-upload-list="false"
+                                    :on-success="handleSuccess"
+                                    :on-error="handleError"
+                                    :on-exceeded-size="handleMaxSize"
+                                    :format="['jpg','jpeg','png']"
+                                    :max-size="4096"
+                                    multiple
+                                    type="drag"
+                                    name="file"                                   
+                                    action="//upload-z2.qiniu.com/"
+                                    :data="{token: uploadConfig.token}"
+                                    style="display: inline-block;width:58px;"
+                                    >
+                                    <div class="upload-icon">
+                                        <Icon type="ios-cloud-upload" size="30"></Icon>
+                                    </div>
+                                </Upload>
                             </FormItem>
                         </Col>
                         <Col>
@@ -64,6 +83,10 @@ export default {
     name: 'image-editor',
     data () {
         return {
+            uploadConfig:{
+                token:'',
+                baseUrl:'',
+            },
             articles: [],
             id:'',
             formBanner: {
@@ -125,10 +148,20 @@ export default {
                 }
             })
         },
+        handleSuccess(res){
+            console.log(res)
+            this.formBanner.advertUrl = this.uploadConfig.baseUrl+res.key
+            this.$Message.success('上传广告图成功!')
+        },
+        handleError(){this.$Message.success('上传广告图失败!')},
+        
+        handleMaxSize(){
+            this.$Message.warning( '文件太大，不能超过 4M');
+        },
         select(item){
-                console.log(item)
-                this.formBanner.articleId =item
-            }
+            console.log(item)
+            this.formBanner.articleId =item
+        }
     },
     mounted () {
         this.$api.getArticleList().then(res => {
@@ -141,6 +174,7 @@ export default {
                 console.log(this.formBanner)
             }
         })
+        this.uploadConfig = this.$api.getUploadToken()
         // let img = document.getElementById('cropImg');
         // this.cropper = new Cropper(img, {
         //     dragMode: 'move',

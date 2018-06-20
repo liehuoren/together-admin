@@ -1,5 +1,4 @@
 import { axios } from './index'
-import qs from 'qs'
 
 const game = {
   getGameTypeList () {
