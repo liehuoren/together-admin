@@ -33,7 +33,7 @@
                                     multiple
                                     type="drag"
                                     name="file"                                   
-                                    action="//upload-z2.qiniu.com/"
+                                    action="//up-z2.qbox.me/"
                                     :data="{token: uploadConfig.token}"
                                     style="display: inline-block;width:58px;"
                                     >
@@ -57,7 +57,7 @@
                                     multiple
                                     type="drag"
                                     name="file"                                   
-                                    action="//upload-z2.qiniu.com/"
+                                    action="//up-z2.qbox.me/"
                                     :data="{token: uploadConfig.token}"
                                     style="display: inline-block;width:58px;"
                                     >

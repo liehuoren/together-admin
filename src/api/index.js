@@ -10,7 +10,6 @@ import upload from './upload'
 
 // axios设置默认值
 axios.defaults.timeout = 15000
-// axios.defaults.baseURL = 'https://together-api.zhlzzz.com'
 
 axios.defaults.baseURL = '/api'
 axios.defaults.headers = {

@@ -26,10 +26,9 @@
                         :on-exceeded-size="handleMaxSize"
                         :format="['jpg','jpeg','png']"
                         :max-size="4096"
-                        multiple
                         type="drag"
                         name="file"                                   
-                        action="//upload-z2.qiniu.com/"
+                        action="//up-z2.qbox.me"
                         :data="{token: uploadConfig.token}"
                         style="display: inline-block;width:58px;"
                         >
