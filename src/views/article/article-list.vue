@@ -1,15 +1,17 @@
 <style lang="less">
-    @import '../../../styles/common.less';
+    @import '../../styles/common.less';
 </style>
 <template>
     <div class="article">
-        <div class="table-add"><Button @click="handleAddArticle" class="long-add-btn common-button" long>新建文章</Button></div>
-        <div>
+        <Row class="text-right">
+          <Button type="primary" @click="handleAddArticle" class="long-add-btn common-button" long>新建文章</Button>
+        </Row>
+        <Row class="margin-top-10">
             <Table border :columns="articles" :data="articleData"></Table>
-        </div>
-        <div class="common-page">
+        </Row>
+        <Row class="margin-top-10 text-right">
             <Page :total="dataCount" :page-size="pageSize"  show-total  @on-change="changePage"></Page>
-        </div>
+        </Row>
     </div>
 </template>
 <script>
@@ -18,9 +20,9 @@ export default {
     return {
       ajaxArticleData: [],
       // 初始化信息总条数
-      dataCount: 20,
+      dataCount: 10,
       // 每页显示多少条
-      pageSize: 10,
+      pageSize: 15,
       articles: [
         {
           title: '文章ID',
@@ -49,11 +51,6 @@ export default {
           align: 'center'
         },
         {
-          title: '文章简介',
-          key: 'introduction',
-          align: 'center'
-        },
-        {
           title: '发布时间',
           key: 'createTime',
           align: 'center'
@@ -61,28 +58,30 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 140,
+          width: 280,
           align: 'center',
           render: (h, params) => {
             return h('div', [
               h('Button', {
                 props: {
-                  type: 'error',
-                  size: 'small'
+                  type: 'primary'
                 },
                 style: {
                   marginRight: '5px'
                 },
                 on: {
                   click: () => {
-                    this.edit(params.index)
+                    let argu = { id: params.row.id };
+                    this.$router.push({
+                        name: 'article-edit',
+                        params: argu
+                    });
                   }
                 }
               }, '编辑'),
               h('Button', {
                 props: {
-                  type: 'error',
-                  size: 'small'
+                  type: 'error'
                 },
                 on: {
                   click: () => {
@@ -97,7 +96,7 @@ export default {
       articleData: [],
       pageData: {
         cursor: 1,
-        limit: 10
+        limit: 15
       }
     }
   },
@@ -115,15 +114,10 @@ export default {
         name: 'article-add'
       })
     },
-    edit (index) {
-      localStorage.actionType = 'update'
-      localStorage.articleId = this.articleData[index].id
-      this.$router.push({
-        name: 'article-edit'
-      })
-    },
     remove (index) {
-      this.$api.deleteArticle(this.articleData[index].id)
+      this.$api.deleteArticle(this.articleData[index].id).then(res => {
+        
+      })
       this.articleData.splice(index, 1)
     },
     changePage (index) {

@@ -4,14 +4,15 @@
 
 <template>
     <div class="banner">
-        <div class="table-add"><Button @click="handleAddGame" class="long-add-btn common-button" long>添加游戏</Button></div>
-        <div>
+        <Row class="text-right">
+          <Button type="primary" @click="handleAddGame" class="long-add-btn common-button" long>添加游戏</Button>
+        </Row>
+        <Row class="margin-top-10">
             <Table border :columns="games" :data="gameData"></Table>
-        </div>
-        <div class="common-page">
+        </Row>
+        <Row class="margin-top-10 text-right">
             <Page :total="dataCount" :page-size="pageSize"  show-total  @on-change="changePage"></Page>
-
-        </div>
+        </Row>
     </div>
 </template>
 
@@ -41,12 +42,48 @@ export default {
         {
           title: 'logo图',
           key: 'logo',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return h('span', {
+              attrs: {
+                style: 'width: 200px;height: 80px;'
+              },
+            }, [
+                h('img', {
+                  props: {
+                    type: 'primary'
+                  },
+                  attrs: {
+                    src: params.row.logo, style: 'width: 80px;height: 80px;'
+                  },
+                  style: {
+                  },
+                }),
+              ]);
+          }
         },
         {
-          title: '游戏图片',
+          title: '游戏背景图片',
           key: 'imgUrl',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return h('span', {
+              attrs: {
+                style: 'width: 200px;height: 80px;'
+              },
+            }, [
+                h('img', {
+                  props: {
+                    type: 'primary'
+                  },
+                  attrs: {
+                    src: params.row.imgUrl, style: 'width: 240px;height: 80px;'
+                  },
+                  style: {
+                  },
+                }),
+              ]);
+          }
         },
         {
           title: '最大匹配人数',
@@ -94,7 +131,7 @@ export default {
             return h('div', [
               h('Button', {
                 props: {
-                  type: 'error',
+                  type: 'primary',
                   size: 'small'
                 },
                 style: {
@@ -108,7 +145,7 @@ export default {
               }, '编辑'),
               h('Button', {
                 props: {
-                  type: 'error',
+                  type: 'primary',
                   size: 'small'
                 },
                 style: {

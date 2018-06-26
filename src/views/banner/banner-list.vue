@@ -1,16 +1,16 @@
 <style lang="less">
-    @import '../../../styles/common.less';
+    @import '../../styles/common.less';
 </style>
 
 <template>
     <div class="banner">
-        <div class="table-add"><Button @click="handleAddBanner" class="long-add-btn common-button" long>添加广告</Button></div>
-        <div>
+        <Row class="text-right">
+          <Button type="primary" @click="handleAddBanner" class="long-add-btn common-button" long>添加广告</Button>
+          <Button type="primary" @click="refresh" class="long-add-btn common-button" icon="android-refresh">刷新</Button>
+        </Row>
+        <Row class="margin-top-10">
             <Table border :columns="banners" :data="bannerData"></Table>
-        </div>
-        <div class="common-page">
-            <!-- <Page :total="dataCount" :page-size="pageSize"  show-total  @on-change="changePage"></Page> -->
-        </div>
+        </Row>
     </div>
 </template>
 
@@ -20,10 +20,6 @@ export default {
   data () {
     return {
       ajaxBannerData: [],
-      // 初始化信息总条数
-      dataCount: 15,
-      // 每页显示多少条
-      pageSize: 10,
       banners: [
         {
           title: '广告ID',
@@ -43,9 +39,27 @@ export default {
           align: 'center'
         },
         {
-          title: '广告链接',
+          title: '广告图片',
           key: 'advertUrl',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            return h('span', {
+              attrs: {
+                style: 'width: 200px;height: 80px;'
+              },
+            }, [
+                h('img', {
+                  props: {
+                    type: 'primary'
+                  },
+                  attrs: {
+                    src: params.row.advertUrl, style: 'width: 200px;height: 80px;'
+                  },
+                  style: {
+                  },
+                }),
+              ]);
+          }
         },
         {
           title: '发布时间',
@@ -55,28 +69,13 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 180,
+          width: 240,
           align: 'center',
           render: (h, params) => {
             return h('div', [
               h('Button', {
                 props: {
-                  type: 'error',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.edit(params.index)
-                  }
-                }
-              }, '编辑'),
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
+                  type: 'error'
                 },
                 on: {
                   click: () => {
@@ -93,20 +92,8 @@ export default {
   },
   methods: {
     handleAddBanner () {
-      localStorage.actionType = 'add'
       this.$router.push({
         name: 'banner-add'
-      })
-    },
-    edit (index) {
-      localStorage.actionType = 'update'
-      localStorage.bannerId = this.bannerData[index].id
-      localStorage.bannerArticle = this.bannerData[index].articleId
-      localStorage.bannerTitle = this.bannerData[index].title
-      localStorage.bannerUrl = this.bannerData[index].advertUrl
-      localStorage.bannerTime = this.bannerData[index].createTime
-      this.$router.push({
-        name: 'banner-edit'
       })
     },
     remove (index) {
@@ -118,10 +105,8 @@ export default {
         this.bannerData = res.data
       })
     },
-    changePage (index) {
-      var _start = (index - 1) * this.pageSize
-      var _end = index * this.pageSize
-      this.bannerData = this.ajaxBannerData.slice(_start, _end)
+    refresh() {
+      this.getBannerList()
     }
   },
   created () {

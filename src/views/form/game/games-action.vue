@@ -21,7 +21,7 @@
                         </Col>
                         <Col span="11">
                             <FormItem label="logo图" prop="logo">
-                                <Input v-model="gameAction.logo" icon="android-list"/>
+                                <Img :src="gameAction.logo" style="width: 80px; height: 80px" />
                                 <Upload
                                     ref="upload"
                                     :show-upload-list="false"
@@ -45,7 +45,7 @@
                         </Col>
                         <Col span="11">
                             <FormItem label="游戏图片" prop="imgUrl">
-                                <Input v-model="gameAction.imgUrl" icon="android-list"/>
+                                <Img :src="gameAction.imgUrl" style="width: 240px; height: 80px" />
                                 <Upload
                                     ref="upload"
                                     :show-upload-list="false"
