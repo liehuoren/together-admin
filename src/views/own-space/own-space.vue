@@ -10,7 +10,7 @@
                 个人信息
             </p>
             <div>
-                <Form 
+                <!-- <Form 
                     ref="userForm"
                     :model="userForm" 
                     :label-width="100" 
@@ -52,7 +52,7 @@
                         <Button type="text" style="width: 100px;" @click="cancelEditUserInfor">取消</Button>
                         <Button type="primary" style="width: 100px;" :loading="save_loading" @click="saveEdit">保存</Button>
                     </div>
-                </Form>
+                </Form> -->
             </div>
         </Card>
         <Modal v-model="editPasswordModal" :closable='false' :mask-closable=false :width="500">
