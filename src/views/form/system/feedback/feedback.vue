@@ -47,18 +47,18 @@ export default {
           key: 'content',
           align: 'center'
         },
-        /* {
+        {
           title: '反馈时间',
           key: 'createTime',
           align: 'center'
-        }, */
+        },
         {
           title: '是否处理',
           key: 'finished',
           align: 'center',
           render: (h,params)=>{
             let text=''
-            if(params.finished == 'true'){text = '已处理'}
+            if(params.row.finished == true){text = '已处理'}
             else{text = '未处理'}
             return h('span',{
               props:{}
@@ -74,7 +74,7 @@ export default {
             return h('div', [
               h('Button', {
                 props: {
-                  type: 'error',
+                  type: 'success',
                   size: 'small'
                 },
                 style: {
@@ -82,7 +82,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.edit(params.index)
+                    this.edit(params.row.id)
                   }
                 }
               }, '处理')
@@ -94,15 +94,10 @@ export default {
     }
   },
   methods: {
-    edit (index) {
-      localStorage.actionType = 'update'
-      localStorage.feedbackId = this.feedbackData[index].id
-      localStorage.feedbackUser = this.feedbackData[index].userId
-      localStorage.feedbackEmail = this.feedbackData[index].email
-      localStorage.feedbackContent = this.feedbackData[index].content
-      localStorage.feedbackFinished = this.feedbackData[index].finished
-      this.$router.push({
-        name: 'feedback-edit'
+    edit (id) {
+      this.$api.updateFeedBack(id).then(res => {
+          this.getFeedbackList();
+          this.$Message.success('Success!')
       })
     },
     handleListApproveBanner () {

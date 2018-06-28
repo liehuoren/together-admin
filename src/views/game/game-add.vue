@@ -1,6 +1,6 @@
 <style lang="less">
-    @import '../../../styles/common.less';
-    @import './game.less';
+    @import '../../styles/common.less';
+    @import 'game.less';
 </style>
 
 <template>
@@ -104,18 +104,16 @@ export default {
             baseUrl:'',
         },
         gameAction: {
-            id: '',
             name: '',
             hot: 'true',
             deleted: 'false',
-            maxMember: 0,
+            maxMember: 1,
             logo: '',
-            imgUrl: '',
-            createTime: ''
+            imgUrl: ''
         },
         ruleValidate: {
             name: [{ required: true, message: '游戏名称不能为空', trigger: 'blur' }],
-            maxMember:[{ required: true, message: '最大匹配人数不能为空', trigger: 'blur' },
+            maxMember:[
                         { type: 'number', message: '请输入数字格式', trigger: 'blur', transform(value) {
                             return Number(value);
                         }}
@@ -130,22 +128,12 @@ export default {
     handleSaveGame (gameAction) {
         this.$refs[gameAction].validate((valid) => {
         if (valid) {
-            if (localStorage.actionType != 'add') {
-                  var id = localStorage.gameId
-                  this.$api.updateGameType(id, this.gameAction).then(res => {
-                      this.$store.commit('removeTag', this.$route.name);
-                      this.$router.push({
-                        name: 'games'
-                      })
-                  })
-              }else{
-                this.$api.createGameType(this.gameAction).then(res => {
-                    this.$store.commit('removeTag', this.$route.name);
-                    this.$router.push({
-                      name: 'games'
-                    })
+            this.$api.createGameType(this.gameAction).then(res => {
+                this.$store.commit('removeTag', this.$route.name);
+                this.$router.push({
+                  name: 'game'
                 })
-              }
+            })
           // 保存广告
         } else {
           this.$Message.error('Fail!')
@@ -153,7 +141,6 @@ export default {
       })
     },
     handleLogoSuccess(res){
-        console.log(res)
         this.gameAction.logo = this.uploadConfig.baseUrl+res.key
         this.$Message.success('上传logo图成功!')
     },
@@ -169,16 +156,7 @@ export default {
     },
   },
   mounted () {
-    if (localStorage.actionType != 'add') {
-      this.gameAction.id = localStorage.gameId
-      this.gameAction.name = localStorage.gameName
-      this.gameAction.imgUrl = localStorage.imgUrl
-      this.gameAction.logo = localStorage.logo
-      this.gameAction.maxMember = localStorage.maxMember
-      this.gameAction.hot = localStorage.gameHot?'true':'false'
-      this.gameAction.deleted = localStorage.gameDeleted?'true':'false'
-      this.gameAction.createTime = localStorage.gameTime
-    }
+    this.uploadConfig = this.$api.getUploadToken()
   }
 }
 </script>

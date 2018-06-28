@@ -133,6 +133,7 @@ export default {
         this.article.content = tinymce.activeEditor.getContent()
         
         this.$api.createArticle(this.article).then(res => {
+          this.$store.commit('removeTag', this.$route.name);
             this.$router.push({
               name: 'article-list'
             })

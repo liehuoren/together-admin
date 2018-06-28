@@ -84,12 +84,12 @@ export default {
   },
   methods: {
     handleSuccess(res){
-        console.log(res)
         this.formAbout.logo = this.uploadConfig.baseUrl+res.key
         this.$Message.success('上传logo图成功!')
     },
-    handleError(){this.$Message.success('上传logo图失败!')},
-    
+    handleError(){
+        this.$Message.success('上传logo图失败!')
+    },
     handleMaxSize(){
         this.$Message.warning( '文件太大，不能超过 4M');
     },

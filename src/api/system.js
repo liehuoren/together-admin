@@ -30,8 +30,8 @@ const system = {
     })
   },
   updateAbout (data) {
-    var url = '/system/about?company=' + data.company + '&logo=' + data.log + '&introduction=' + data.introduction
-    return axios.put(url).then(res => {
+    var url = '/system/about'
+    return axios.put(url, data).then(res => {
       return res
     })
     .catch(e => {

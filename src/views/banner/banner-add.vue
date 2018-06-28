@@ -93,6 +93,11 @@ export default {
             this.$refs[formBanner].validate((valid) => {
                 if (valid) {
                     this.$api.createBanner(this.formBanner).then(res => {
+                        this.formBanner = {
+                            title: '',
+                            articleId: '',
+                            advertUrl: ''
+                        }
                         this.$Message.success('Success!');
                         this.$router.push({
                             name: 'banner-list'
@@ -114,14 +119,12 @@ export default {
             this.$Message.warning( '文件太大，不能超过 4M');
         },
         select(item){
-            console.log(item)
             this.formBanner.articleId = item
         }
     },
     mounted () {
         this.$api.getArticleList().then(res => {
             this.articles = res.data
-
         })
         var id = this.$route.params.id
         this.uploadConfig = this.$api.getUploadToken()

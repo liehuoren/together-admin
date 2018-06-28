@@ -131,6 +131,7 @@ export default {
         
         var id = this.article.id
         this.$api.updateArticle(id, this.article).then(res => {
+            this.$store.commit('removeTag', this.$route.name);
             this.$router.push({
               name: 'article-list'
             })
@@ -181,7 +182,7 @@ export default {
         this.article = res.data
         tinymce.activeEditor.setContent(this.article.content)
     })
-
+    
     this.uploadConfig = this.$api.getUploadToken()
   },
   destroyed () {

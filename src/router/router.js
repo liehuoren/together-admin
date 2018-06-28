@@ -60,11 +60,9 @@ export const otherRouter = {
 
         { path: 'banner-add', title: '广告新增', name: 'banner-add', component: () => import('@/views/banner/banner-add.vue') },
 
-        { path: 'feedback-edit', title: '反馈处理', name: 'feedback-edit', component: () => import('@/views/form/system/feedback/feedback-action.vue') },
-
-        { path: 'games-add', title: '游戏新增', name: 'games-add', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
-        { path: 'games-edit', title: '游戏编辑', name: 'games-edit', icon: 'compose', component: () => import('@/views/form/game/games-action.vue') },
-        { path: 'games-config', title: '游戏配置', name: 'games-config', icon: 'compose', component: () => import('@/views/form/game/games-config.vue') }
+        { path: 'game-add', title: '游戏新增', name: 'game-add', icon: 'compose', component: () => import('@/views/game/game-add.vue') },
+        { path: 'game-edit/:id', title: '游戏编辑', name: 'game-edit', icon: 'compose', component: () => import('@/views/game/game-edit.vue') },
+        { path: 'game-config/:id', title: '游戏配置', name: 'game-config', icon: 'compose', component: () => import('@/views/game/game-config.vue') }
     ]
 };
 
@@ -94,13 +92,13 @@ export const appRouter = [
         ]
     },
     {
-        path: '/game',
+        path: '/',
         icon: 'android-checkbox',
         name: 'game',
         title: '游戏管理',
         component: Main,
         children: [
-            { path: 'games', title: '游戏列表', name: 'games', icon: 'compose', component: () => import('@/views/form/game/games.vue') }            
+            { path: 'game-list', title: '游戏列表', name: 'game-list', icon: 'compose', component: () => import('@/views/game/game-list.vue') }            
         ]
     },
     {
@@ -110,7 +108,7 @@ export const appRouter = [
         title: '用户管理',
         component: Main,
         children: [
-            { path: 'users', title: '用户列表', name: 'users', icon: 'compose', component: () => import('@/views/form/user/users.vue') }
+            { path: 'users', title: '用户列表', name: 'users', icon: 'compose', component: () => import('@/views/user/users.vue') }
         ]
     }
 ];

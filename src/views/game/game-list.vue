@@ -1,5 +1,5 @@
 <style lang="less">
-    @import '../../../styles/common.less';
+    @import '../../styles/common.less';
 </style>
 
 <template>
@@ -139,7 +139,11 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.edit(params.index)
+                    let argu = { id: params.row.id };
+                    this.$router.push({
+                        name: 'game-edit',
+                        params: argu
+                    });
                   }
                 }
               }, '编辑'),
@@ -153,9 +157,9 @@ export default {
                 },
                 on: {
                   click: () => {
-                    let argu = { gameId: params.row.id };
+                    let argu = { id: params.row.id };
                     this.$router.push({
-                        name: 'games-config',
+                        name: 'game-config',
                         params: argu
                     });
                   }
@@ -181,23 +185,8 @@ export default {
   },
   methods: {
     handleAddGame () {
-      localStorage.actionType = 'add'
       this.$router.push({
-        name: 'games-add'
-      })
-    },
-    edit (index) {
-      localStorage.actionType = 'update'
-      localStorage.gameId = this.gameData[index].id
-      localStorage.gameName = this.gameData[index].name
-      localStorage.imgUrl = this.gameData[index].imgUrl
-      localStorage.logo = this.gameData[index].logo
-      localStorage.maxMember = this.gameData[index].maxMember
-      localStorage.gameHot = this.gameData[index].hot
-      localStorage.gameDeleted = this.gameData[index].deleted
-      localStorage.gameTime = this.gameData[index].createTime
-      this.$router.push({
-        name: 'games-edit'
+        name: 'game-add'
       })
     },
     remove (index) {

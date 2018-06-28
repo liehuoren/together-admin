@@ -1,6 +1,6 @@
 <style lang="less">
-    @import '../../../styles/common.less';
-    @import './game.less';
+    @import '../../styles/common.less';
+    @import 'game.less';
 </style>
 
 <template>
@@ -163,7 +163,7 @@ export default {
                   this.$api.updateGameConfig(this.gameConfig.id, this.gameConfig).then(res => {
                       this.$store.commit('removeTag', this.$route.name);
                       this.$router.push({
-                        name: 'games'
+                        name: 'game'
                       })
                   })
               }else{
@@ -180,7 +180,6 @@ export default {
     },
     getGamesConfig(gameId){
         this.$api.getGamesConfig(gameId).then(res=>{
-            console.log("getGamesConfig-res.data:"+res.data)
             this.gameAction = res.data
             if(this.gameAction.gameConfig == null){
                 this.updateOption = false
@@ -189,12 +188,12 @@ export default {
                 this.updateOption = true
                 this.gameConfig.required = this.gameConfig.required+''
             }
-            console.log("gameConfig:"+this.gameConfig)
         })
     }
   },
   mounted () {
-    this.getGamesConfig(this.$route.params.gameId)
+    this.getGamesConfig(this.$route.params.id)
+    this.uploadConfig = this.$api.getUploadToken()
   }
 }
 </script>
