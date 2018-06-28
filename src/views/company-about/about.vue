@@ -67,7 +67,6 @@ export default {
         },
         showPercent:'',
         formAbout: {
-            id: '1',
             company: '组起',
             introduction: '好友游戏匹配神器',
             logo: ''
@@ -98,8 +97,8 @@ export default {
         this.$refs[formAbout].validate((valid) => {
             if (valid) {
                 this.$api.updateAbout(this.formAbout).then(res => {
-                this.$Message.success('Success!')
-            })
+                    this.$Message.success('Success!')
+                })
             } else {
                 this.$Message.error('Fail!')
             }
