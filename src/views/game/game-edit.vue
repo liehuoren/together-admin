@@ -68,14 +68,6 @@
                             </FormItem>
                         </Col>
                         <Col span="11">
-                            <FormItem label="是否热门" prop="hot">
-                                <i-switch size="large" v-model="gameAction.hot" true-vlue="true" false-value="false">
-                                    <span slot="open">是</span>
-                                    <span slot="close">否</span>
-                                </i-switch>
-                            </FormItem>
-                        </Col>
-                        <Col span="11">
                             <FormItem label="是否停用" prop="deleted">
                                 <i-switch size="large" v-model="gameAction.deleted" true-vlue="true" false-value="false">
                                     <span slot="open">是</span>

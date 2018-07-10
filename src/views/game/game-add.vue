@@ -16,7 +16,7 @@
                         </Col>
                         <Col span="11">
                             <FormItem label="最大人数" prop="maxMember">
-                                <Input v-model="gameAction.maxMember" icon="android-list"/>
+                                <Input v-model="gameAction.maxMember" number icon="android-list"/>
                             </FormItem>
                         </Col>
                         <Col span="11">
@@ -67,14 +67,7 @@
                                 </Upload>
                             </FormItem>
                         </Col>
-                        <Col span="11">
-                            <FormItem label="是否热门" prop="hot">
-                                <Select v-model="gameAction.hot">
-                                    <Option value="true">是</Option>
-                                    <Option value="false">否</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
+
                         <Col span="11">
                             <FormItem label="是否停用" prop="deleted">
                                 <Select v-model="gameAction.deleted">

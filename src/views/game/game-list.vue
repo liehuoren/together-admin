@@ -91,19 +91,6 @@ export default {
           align: 'center'
         },
         {
-          title: '是否热门',
-          key: 'hot',
-          align: 'center',
-          render: (h,params)=>{
-            let text=''
-            if(params.row.hot){text = '热门'}
-            else{text = '不热门'}
-            return h('span',{
-              props:{}
-              },text)
-          }
-        },
-        {
           title: '是否停用',
           key: 'deleted',
           align: 'center',
