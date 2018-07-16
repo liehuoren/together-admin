@@ -78,7 +78,7 @@ const game = {
       })
   },
   createGameConfig(gameTypeId,data){
-    var url = '/games/game-configs/?gameTypeId='+gameTypeId+'&inputType='+data.inputType+'&label='+data.label+'&required='+data.required
+    var url = '/games/game-configs?gameTypeId='+gameTypeId+'&inputType='+data.inputType+'&label='+data.label+'&required='+data.required
     return axios.post(url).then(res => {
       return res
     })

@@ -18,10 +18,10 @@
                     <Row>
                         <Col span="10">
                             <FormItem label="是否必选" prop="required">
-                                <Select v-model="gameConfig.required">
-                                    <Option value="true">是</Option>
-                                    <Option value="false">否</Option>
-                                </Select>
+                                <i-switch size="large" v-model="gameConfig.required" true-vlue="true" false-value="false">
+                                    <span slot="open">是</span>
+                                    <span slot="close">否</span>
+                                </i-switch>
                             </FormItem>
                         </Col>
                     </Row>
@@ -35,7 +35,7 @@
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row v-show="updateOption">
+                    <Row v-if="gameConfig.id">
                         <Col>
                             <FormItem label="配置选项" prop="options">
                                 <Tag v-for="item in gameConfig.options" :key="item.id" :name="item.id" closable @on-close="handleOptionClose">{{ item.value }}</Tag>
@@ -50,20 +50,6 @@
                     </Row>
                 </Form>
             </Card>
-            <Card v-show="addOption">
-                <Row>
-                    <Col>
-                        <span class="opt-label">配置选项</span>
-                        <Tag v-for="item in gameConfig.options" :key="item.id" :name="item.id" closable @on-close="handleOptionClose">{{ item.value }}</Tag>
-                        <Button icon="ios-plus-empty" type="dashed" size="small" @click="handleOptionAdd">添加配置选项</Button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col class="game-form-btn">
-                        <span><Button type="primary" class="common-button" @click="handleReturn()" icon="folder">确定</Button></span>
-                    </Col>
-                </Row>
-            </Card>
         </div>
     </div>
 </template>
@@ -72,13 +58,12 @@ export default {
   name: 'gameConfig',
   data () {
     return {
-        updateOption:true,
-        addOption:false,
         optionName:'',
         gameConfig:{
             id:'',
             inputType:'',
             label:'',
+            required: false,
             options:[]
         },
         ruleValidate:{
@@ -153,23 +138,22 @@ export default {
     },
     handleReturn(){
         this.$router.push({
-            name: 'games'
+            name: 'game-list'
         })
     },
     handleSaveGame (gameConfig) {
         this.$refs[gameConfig].validate((valid) => {
         if (valid) {
-            if (this.updateOption) {
+            if (this.gameConfig.id) {
                   this.$api.updateGameConfig(this.gameConfig.id, this.gameConfig).then(res => {
                       this.$store.commit('removeTag', this.$route.name);
                       this.$router.push({
-                        name: 'game'
+                        name: 'game-list'
                       })
                   })
               }else{
-                this.$api.createGameConfig(this.$route.params.gameId,this.gameConfig).then(res => {
+                this.$api.createGameConfig(this.$route.params.id,this.gameConfig).then(res => {
                     this.gameConfig = res.data
-                    this.addOption = true
                     this.$Message.success('保存游戏配置成功!')
                 })
               }
@@ -181,13 +165,10 @@ export default {
     getGamesConfig(gameId){
         this.$api.getGamesConfig(gameId).then(res=>{
             this.gameAction = res.data
-            if(this.gameAction.gameConfig == null){
-                this.updateOption = false
-            }else{
+            if (this.gameAction.gameConfig) {
                 this.gameConfig = this.gameAction.gameConfig
-                this.updateOption = true
-                this.gameConfig.required = this.gameConfig.required+''
             }
+            
         })
     }
   },

@@ -109,7 +109,6 @@ export default {
       })
     },
     handleAddArticle () {
-      localStorage.actionType = 'add'
       this.$router.push({
         name: 'article-add'
       })
