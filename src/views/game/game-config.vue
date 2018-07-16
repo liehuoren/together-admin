@@ -30,7 +30,7 @@
                             <FormItem label="是否多选">
                                 <RadioGroup v-model="gameConfig.inputType">
                                     <Radio label="radio">单选</Radio>
-                                    <Radio label="checkbox">多选</Radio>
+                                    
                                 </RadioGroup>
                             </FormItem>
                         </Col>
